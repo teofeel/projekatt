@@ -2,17 +2,20 @@
 #define ACCOUNT_HPP_INCLUDED
 #include <string>
 #include "balance.hpp"
-#include "broker.hpp"
-//metode: get new balance
+#include "portfolio.hpp"
+
+//akount baza podataka, iz nje pristupamo portfolio.txt, history.txt
+//svaki akount ima poseban portfolio.txt, history.txt
 class Account{
 private:
     string ime;
     string prezime;
     int  acc_num;
-    Balance b; //koliko para imamo na racunu
-    Broker br; //kojeg borkera koristimo
+    //string password;
+    Balance b; //koliko para imamo na racunu isto iz fajla treba da se ispise
+    Portfolio p; //ispis portfolija iz fajla
 public:
-    Account (string i,string p, int a, Valuta vv, double ss, int c, double d,string n, string sn, double sp): b(vv,ss,c,d), br(n,sn,sp)
+    Account (string i,string p, int a, Valuta vv, double ss, int c, double d,const Portfolio &pt): b(vv,ss,c,d), p(pt)
     {
         ime=i;
         prezime=p;
@@ -22,19 +25,20 @@ public:
     void setPrezime(string p){prezime=p;}
     void setAcc(int a){acc_num=a;}
 
-    Balance getB(){return b;}
+    Balance getB()const{return b;}
     string getIme(){return ime;}
     string getPrezime(){return prezime;}
-    int getAcc(){return acc_num;}
+    int getAcc()const{return acc_num;}
 
     Valuta getV()const{return b.getValuta();}
-    double getSs()const{return b.getS();}
+    double getBalans()const{return b.getBalance();}
     int getC()const{return b.getCredit();}
     double getD()const{return b.getDeposit();}
 
-    string getName()const{return br.getName();}
-    string getSN()const{return br.getSN();}
-    double getSpread()const{return br.getSpread();}
+    double getInvestment(){return p.getCurr_Price();}
+
+    //login funkcija
+
 };
 
 #endif // ACCOUNT_HPP_INCLUDED

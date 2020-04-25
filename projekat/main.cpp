@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -13,7 +14,11 @@ using namespace std;
 #include "balance.hpp"
 #include "history.hpp"
 
+//potrebni stock.txt, history.txt, portfolio.txt
+//svaki akount moze pristupiti stock.txt i videti sta mogu da kupe
+
 int main()
 {
     return 0;
+
 }

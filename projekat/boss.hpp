@@ -2,6 +2,7 @@
 #define BOSS_HPP_INCLUDED
 #include <string>
 #include "stock.hpp"
+
 enum Iskustvo{pocetnik, senior};
 class Boss{
 private:
@@ -15,6 +16,12 @@ public:
         ime=i;
         prezime=p;
         i=ii;
+    }
+    Boss(const Boss &b): s(b.s)
+    {
+        ime=b.ime;
+        prezime=b.prezime;
+        i=b.i;
     }
     void setIme(string i){ime=i;}
     void setPrezime(string p){prezime=p;}

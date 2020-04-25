@@ -1,6 +1,7 @@
 #ifndef BROKER_HPP_INCLUDED
 #define BROKER_HPP_INCLUDED
 #include <string>
+
 class Broker{
 private:
     string name;
@@ -12,6 +13,12 @@ public:
         name=n;
         server_name=sn;
         spread=sp;
+    }
+    Broker(const Broker &b)
+    {
+        name=b.name;
+        server_name=b.server_name;
+        spread=b.spread;
     }
     void setName(string n){name=n;}
     void setSN(string sn){server_name=sn;}

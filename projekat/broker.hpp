@@ -8,6 +8,12 @@ private:
     string server_name;
     double spread;
 public:
+    Broker()
+    {
+        name="????";
+        server_name="Server";
+        spread=0;
+    }
     Broker(string n, string sn, double sp)
     {
         name=n;

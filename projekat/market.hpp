@@ -9,6 +9,11 @@ private:
     string loc;
     vector <Stock> st; //deonice se citaju iz fajla
 public:
+    Market():st()
+    {
+        name="Naziv";
+        loc="Lokacija";
+    }
     Market(string n, string l, const Stock &st1)
     {
         name=n;
@@ -29,7 +34,7 @@ public:
     double getValue()
     {
         double value=0;
-        for(int i=1; i<st.size();i++)
+        for(int i=0; i<st.size();i++)
         {
             value=value + st[i].getMarketCap();
         }

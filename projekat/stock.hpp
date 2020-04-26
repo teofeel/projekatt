@@ -1,6 +1,7 @@
 #ifndef STOCK_HPP_INCLUDED
 #define STOCK_HPP_INCLUDED
 #include "market.hpp"
+//radi
 enum Sector{Tech, Finansije, Medicina, Hemija, Rudarstvo, Prehrana, Nekretnine, Prevoz, Energetika};
 //poseban fajl
 class Stock{
@@ -11,6 +12,14 @@ protected:
     Sector s;
     double spread; // dodaje se na price kad se kupuje
 public:
+    Stock()
+    {
+        symbol="????";
+        price=0;
+        num_shares=0;
+        s=Tech;
+        spread=0;
+    }
     Stock(string s, double p, int ns, Sector ss, double sp)
     {
         symbol=s;

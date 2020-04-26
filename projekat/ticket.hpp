@@ -10,6 +10,16 @@ protected:
     int quantity;
     Stock st;
 public:
+    Ticket():st()
+    {
+        num=0;
+        quantity=0;
+    }
+    Ticket(const Stock &s1):st(s1.getSY(),s1.getP(),s1.getNS(),s1.getS(),s1.getSpread())
+    {
+        num=0;
+        quantity=0;
+    }
     Ticket(int n, int quant,const Stock &st1): st(st1.getSY(),st1.getP(),st1.getNS(),st1.getS(),st1.getSpread())
     {
         num=n;
@@ -21,7 +31,7 @@ public:
         quantity=t1.quantity;
     }
 
-    void setNum(int n){num=rand()%2000001;}
+    void setNum(){num=rand()%2000001;}
     void setQuant(int q){quantity=q;}
 
     int getNum()const{return num;}
@@ -39,7 +49,6 @@ public:
         cout<<"Broj kupljenih/prodatih deonica: "<<quantity<<endl;
 
     }
-    //ispis celog ticketa
 };
 
 #endif // TICKET_HPP_INCLUDED

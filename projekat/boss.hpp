@@ -2,7 +2,7 @@
 #define BOSS_HPP_INCLUDED
 #include <string>
 #include "stock.hpp"
-
+//radi
 enum Iskustvo{pocetnik, senior};
 class Boss{
 private:
@@ -11,6 +11,18 @@ private:
     Iskustvo i;
     Stock s;
 public:
+    Boss():s("????",0,0,Tech,0)
+    {
+        ime="Ime";
+        prezime="Prezime";
+        i=pocetnik;
+    }
+    Boss(const Stock &s1): s(s1.getSY(),s1.getP(),s1.getNS(),s1.getS(),s1.getSpread())
+    {
+        ime="Ime";
+        prezime="Prezime";
+        i=pocetnik;
+    }
     Boss(string i, string p, Iskustvo ii, const Stock &s1): s(s1)
     {
         ime=i;

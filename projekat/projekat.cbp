@@ -41,7 +41,6 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="market.hpp" />
 		<Unit filename="portfolio.hpp" />
-		<Unit filename="sell.hpp" />
 		<Unit filename="stock.hpp" />
 		<Unit filename="ticket.hpp" />
 		<Extensions>

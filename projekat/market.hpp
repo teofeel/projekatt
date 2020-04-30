@@ -7,7 +7,7 @@ class Market{
 private:
     string name;
     string loc;
-    vector <Stock> st; //deonice se citaju iz fajla
+    vector <Stock> st;
 public:
     Market():st()
     {
@@ -25,6 +25,7 @@ public:
     void setL(string l){loc=l;}
     void setAnotherST(const Stock& st1)
     {
+        st.resize(st.size()+1);
         st.push_back(st1);
     }
 

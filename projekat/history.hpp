@@ -4,10 +4,9 @@
 #include "stock.hpp"
 #include "ticket.hpp"
 #include <vector>
+
 enum Mesec{Januar, Februar, Mart, April, Maj, Jun, Jul, Avgust, Septembar, Oktobar, Novembar, Decembar};
 
-//poseban fajl
-//sluzi za pracenje naseg balance
 class History{
 protected:
     int dan;

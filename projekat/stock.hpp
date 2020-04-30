@@ -1,9 +1,9 @@
 #ifndef STOCK_HPP_INCLUDED
 #define STOCK_HPP_INCLUDED
-#include "market.hpp"
-//radi
+
+
 enum Sector{Tech, Finansije, Medicina, Hemija, Rudarstvo, Prehrana, Nekretnine, Prevoz, Energetika};
-//poseban fajl
+
 class Stock{
 protected:
     string symbol;
@@ -49,7 +49,10 @@ public:
     Sector getS()const{return s;}
     double getSpread()const{return spread;}
 
-    double getMarketCap()const{return num_shares*price;}//izracunava trzisnu kapitalizciju
+    double getMarketCap()const
+    {
+        return num_shares*price;
+    }
 
     friend void IspisStock(){}
 };

@@ -2,29 +2,31 @@
 #define SELL_HPP_INCLUDED
 #include "ticket.hpp"
 #include "stock.hpp"
+#include "balance.hpp"
 
-//u portfolio.txt upisujemo sell_price
-//dodajemo sell_price*quant ma balance i upisujemo u history fajl
 
 class Sell:public Ticket{
 private:
-    double sell_price;
+    Balance b;
 public:
-    Sell(const Ticket &t):Ticket(t.getNum(),t.getQuant(),t.getStock()),sell_price(t.getStockPrice()*t.getQuant()){}
+    Sell(const Ticket &t,const Balance &bl):Ticket(t.getNum(),t.getQuant(),t.getStock()),b(bl.getValuta(),bl.getBalance(),bl.getCredit(),bl.getDeposit()){}
 
-    void setSellPrice()
+
+    double getSellPrice()
     {
-        sell_price=st.getP()-st.getSpread();
+        return st.getP()-st.getSpread();
     }
-
-    double getSellPrice(){return sell_price;}
 
     void SellStock()
     {
+        double sell_price;
         for(int i=0;i<quantity;i++)
         {
             sell_price = st.getP()-st.getSpread();
         }
+        double a;
+        a=b.getBalance()+sell_price;
+        b.setBalance(a);
     }
 };
 

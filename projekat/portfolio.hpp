@@ -1,44 +1,46 @@
 #ifndef PORTFOLIO_HPP_INCLUDED
 #define PORTFOLIO_HPP_INCLUDED
 #include <vector>
-#include "history.hpp"
+#include "balance.hpp"
 #include "buy.hpp"
-#include "sell.hpp"
+#include <ctime>
 
-//poseban fajl
-//upisuju se ticketi u ovu bazu
-//proverava se iz portfolio baze da li moze da se proda neka deonica
-//kada prodajemo deonicu
 class Portfolio{
 private:
-    vector<Ticket> t;
+    vector<Buy_Sell> bs;
+    Balance bl;
 public:
-    Portfolio(const Ticket &t1)
+    Portfolio():bl(),bs(){}
+
+    Portfolio(const Buy_Sell &t1, const Balance &b):bl(b.getValuta(),b.getBalance(),b.getCredit(),b.getDeposit())
     {
-        t.push_back(t1);
+        bs.push_back(t1);
     }
 
-    void setAnotherTicket(const Ticket& t1)
+    void setAnotherTicket(const Buy_Sell& t1)
     {
-        t.push_back(t1);
+        bs.push_back(t1);
     }
 
-    vector<Ticket> getTicket()const{
-
-        return t;
+    vector<Buy_Sell> getTicket()const{
+        return bs;
     }
 
     double getCurr_Price()
     {
         double curr=0;
-        for(int i=0; i<t.size(); i++)
+        for(int i=0; i<bs.size(); i++)
         {
-            curr=curr+t[i].getStockPrice()*t[i].getQuant();
+            curr=curr+bs[i].getStockPrice()*bs[i].getQuant();
         }
         return curr;
     }
 
-
+    Balance getBL()const{return bl;}
+    Valuta getValuta()const{return bl.getValuta();}
+    double getBalance()const{return bl.getBalance();}
+    int getCredit()const{return bl.getCredit();}
+    double getDeposit()const{return bl.getDeposit();}
 
 };
 

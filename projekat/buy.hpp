@@ -2,33 +2,53 @@
 #define BUY_HPP_INCLUDED
 #include "ticket.hpp"
 #include "broker.hpp"
-#include "stock.hpp"
-//oduzimamo ask_price*quant od balance i upisujemo u history fajl
-class Buy: public Ticket{
-private:
-    double ask_price;
-public:
-    Buy(const Ticket &t):Ticket(t.getNum(),t.getQuant(),t.getStock()),ask_price((t.getStockPrice()+t.getStockSpread())*t.getQuant()){}
-    void setAskPrice(const Stock &s, const Broker &b)
-    {
-        ask_price = s.getP()+s.getSpread()+b.getSpread();
-    }
+#include "balance.hpp"
 
-    double getAskPrice(){return ask_price;}
+class Buy_Sell: public Ticket{
+private:
+    Broker b;
+    Balance bl;
+public:
+    Buy_Sell():Ticket(),b(),bl(){}
+    Buy_Sell(const Ticket &t,const Broker &br,const Balance &bal):
+        Ticket(t.getNum(),t.getQuant(),t.getStock()), b(br.getName(),br.getSN(),br.getSpread()), bl(bal.getValuta(),bal.getBalance(),bal.getCredit(),bal.getDeposit()){}
+    Buy_Sell(const Buy_Sell &bs):
+        Ticket(bs),b(bs.getBroker()),bl(bs.getBalans()){}
+
+    Broker getBroker()const{return b;}
+    Balance getBalans()const{return bl;}
+
+    double getAskPrice()
+    {
+        return st.getP()+st.getSpread()+b.getSpread();
+    }
+    double getSellPrice()
+    {
+        return st.getP()-st.getSpread();
+    }
 
     void BuyStock()
     {
+        double buy_price;
         for(int i=0; i<quantity;i++)
         {
             st.setP(st.getP()+st.getSpread());
+            buy_price=st.getP()+st.getSpread()+b.getSpread();
         }
+        bl.setBalance(bl.getBalance()-buy_price);
+    }
+    void SellStock()
+    {
+        double sell_price;
+        for(int i=0;i<quantity;i++)
+        {
+            st.setP(st.getP()-st.getSpread());
+            sell_price = st.getP()-st.getSpread();
+        }
+        bl.setBalance( bl.getBalance()+sell_price);
     }
 
-    void IspisiTicket()
-    {
-        Ticket::IspisiTicketa();
-        cout<<"Tipa: Buy"<<endl;
-    }
+
 };
 
 

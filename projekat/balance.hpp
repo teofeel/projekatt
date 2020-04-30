@@ -2,12 +2,12 @@
 #define BALANCE_HPP_INCLUDED
 
 enum Valuta{eur, usd, gbp, jpy, chf, aud};
-//radi
+
 class Balance{
 private:
     Valuta v;
-    double balance; //balance
-    int credit; //pozajmica
+    double balance;
+    int credit;
     double deposit;
 public:
     Balance()
@@ -34,7 +34,7 @@ public:
     }
 
     void setV(Valuta vv){v=vv;}
-    void setBalance(double ss){balance=ss;}//na stari balance se dodaje deposit
+    void setBalance(double ss){balance=ss;}
     void setC(int c){credit=c;}
     void setD(double d){deposit=d;}
 
@@ -42,6 +42,12 @@ public:
     double getBalance()const{return balance;}
     int getCredit()const{return credit;}
     double getDeposit()const{return deposit;}
+
+    void newBalance()
+    {
+        balance=balance+deposit;
+        deposit=0;
+    }
 
 };
 

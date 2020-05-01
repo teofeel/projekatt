@@ -53,6 +53,16 @@ public:
     {
         return num_shares*price;
     }
+    void Kupi(double spr, int b)
+    {
+        price=price+spr;
+        num_shares=num_shares-b;
+    }
+    void Prodaj(double spr, int b)
+    {
+        price=price-spr;
+        num_shares=num_shares+b;
+    }
 
     friend void IspisStock(){}
 };

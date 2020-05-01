@@ -24,6 +24,16 @@ using namespace std;
 
 int main()
 {
+    Stock sm("APPL",280,50000,Tech,0.5);
 
+    Balance bl(eur,10000,0,0);
+    Broker br("ICMarkets","IC_Live20",0.5);
+    Ticket t(5555,2,sm);
+    cout<<"Pre kupovine: "<<sm.getP()<<endl;
+    Buy_Sell bs(t,br,bl);
+    bs.BuyStock();
+    cout<<"AskPrice:"<<bs.getAskPrice()<<endl;
+    sm.setP(bs.getStockPrice());
+    cout<<"Krajnja cena: "<<sm.getP()<<endl;
     return 0;
 }

@@ -10,7 +10,7 @@ private:
     vector<Buy_Sell> bs;
     Balance bl;
 public:
-    Portfolio():bl(),bs(){}
+    Portfolio():bs(),bl(){}
 
     Portfolio(const Buy_Sell &t1, const Balance &b):bl(b.getValuta(),b.getBalance(),b.getCredit(),b.getDeposit())
     {

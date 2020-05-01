@@ -1,6 +1,5 @@
 #ifndef TICKET_HPP_INCLUDED
 #define TICKET_HPP_INCLUDED
-
 #include "stock.hpp"
 #include <cstdlib>
 
@@ -37,6 +36,14 @@ public:
     double getStockPrice()const{return st.getP();}
     double getStockSpread()const{return st.getSpread();}
 
+    void Kupi(double spr)
+    {
+        st.Kupi(spr,1);
+    }
+    void Prodaj(double spr)
+    {
+        st.Prodaj(spr,1);
+    }
     void IspisiTicketa()
     {
         cout<<"Broj ticketa: "<<num<<endl;

@@ -1,2 +1,3 @@
 ICMarkets,IC_Live20,0.5
-ICMarkets,IC_Live20,0.5
+ICMarkets,IC_Live19,0.4
+BlueBerry,IC_Live18,0.6

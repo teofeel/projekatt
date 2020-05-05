@@ -35,12 +35,11 @@ int main()
     cout<<"AskPrice:"<<bs.getAskPrice()<<endl;
     sm.setP(bs.getStockPrice());
     cout<<"Krajnja cena: "<<sm.getP()<<endl;
-
-    string stonksfajl="stocks.txt";
-    sm.pisiTxt('a');
-    sm.citajStocks();
-
+    Broker br1("ICMarkets","IC_Live19",0.4);
+    Broker br2("BlueBerry","IC_Live18",0.6);
     br.pisiTxt('a');
+    br1.pisiTxt('a');
+    br2.pisiTxt('a');
     br.citajBroker();
     return 0;
 }

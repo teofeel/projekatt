@@ -37,6 +37,7 @@
 		<Unit filename="boss.hpp" />
 		<Unit filename="broker.hpp" />
 		<Unit filename="buy.hpp" />
+		<Unit filename="funkcije.hpp" />
 		<Unit filename="history.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="market.hpp" />

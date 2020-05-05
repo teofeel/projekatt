@@ -1,9 +1,8 @@
 #ifndef ACCOUNT_HPP_INCLUDED
 #define ACCOUNT_HPP_INCLUDED
 #include <string>
-
-#include "portfolio.hpp"
 #include "balance.hpp"
+#include "funkcije.hpp"
 class Account{
 private:
     string ime;
@@ -63,6 +62,8 @@ public:
         else
             return false;
     }
+
+
 
 };
 

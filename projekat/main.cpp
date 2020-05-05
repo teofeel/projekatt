@@ -1,18 +1,18 @@
 #include <iostream>
+#include <cstdlib>
 #include <fstream>
+#include <string>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 #include "account.hpp"
-#include "balance.hpp"
 #include "boss.hpp"
-#include "broker.hpp"
-#include "buy.hpp"
 #include "history.hpp"
 #include "market.hpp"
 #include "portfolio.hpp"
-#include "stock.hpp"
-#include "ticket.hpp"
+#include "funkcije.hpp"
+
 
 /*
     prvo ide registracija koja ce biti uradjena pomocu setera u funkciji meni kad korisnik to izabere
@@ -35,5 +35,12 @@ int main()
     cout<<"AskPrice:"<<bs.getAskPrice()<<endl;
     sm.setP(bs.getStockPrice());
     cout<<"Krajnja cena: "<<sm.getP()<<endl;
+
+    string stonksfajl="stocks.txt";
+    sm.pisiTxt('a');
+    sm.citajStocks();
+
+    br.pisiTxt('a');
+    br.citajBroker();
     return 0;
 }

@@ -1,8 +1,34 @@
 #ifndef STOCK_HPP_INCLUDED
 #define STOCK_HPP_INCLUDED
 
+enum Sector{Tech, Finansije, Medicina, Hemija, Rudarstvo, Prehrana, Nekretnine, Transport, Energetika};
 
-enum Sector{Tech, Finansije, Medicina, Hemija, Rudarstvo, Prehrana, Nekretnine, Prevoz, Energetika};
+string EnumSector(Sector s)
+{
+    switch(s)
+    {
+    case Tech:
+        return "Tech";
+    case Finansije:
+        return "Finansije";
+    case Medicina:
+        return "Medicina";
+    case Hemija:
+        return "Hemija";
+    case Rudarstvo:
+        return "Rudarstvo";
+    case Prehrana:
+        return "Prehrana";
+    case Nekretnine:
+        return "Nekretnine";
+    case Transport:
+        return "Transport";
+    case Energetika:
+        return "Enenrgetika";
+    default:
+        return "????";
+    }
+}
 
 class Stock{
 protected:
@@ -10,7 +36,7 @@ protected:
     double price;
     int num_shares;
     Sector s;
-    double spread; // dodaje se na price kad se kupuje
+    double spread;
 public:
     Stock()
     {
@@ -65,14 +91,47 @@ public:
     }
 
     friend void IspisStock(){}
+
+    void pisiTxt(char mode='w')
+    {
+        ofstream fajl;
+
+        if (mode=='a'){
+            fajl.open ("stocks.txt", ios_base::app);
+        }
+        else{
+            fajl.open ("stocks.txt");
+        }
+        fajl<< symbol <<","<< price <<","<< num_shares <<","<< EnumSector(s) <<","<< spread <<endl;
+        fajl.close();
+    }
+
+    void citajStocks()
+    {
+        string linija;
+        ifstream fajl ("stocks.txt");
+        if (fajl.is_open())
+        {
+            while ( getline (fajl,linija) )
+            {
+                cout << linija << '\n';
+            }
+            fajl.close();
+        }
+
+        else
+            cout << "Neuspesno otvoren fajl";
+    }
 };
 
 void IspisStock(const Stock &st)
-    {
-        cout<<"Naziv deonice: "<<st.getSY()<<endl;
-        cout<<"Cena: "<<st.getP()<<endl;
-        cout<<"Broj izdatih deonica: "<<st.getNS()<<endl;
-        cout<<"Trzisna Kapitalizacija: "<<st.getMarketCap()<<endl;
-        cout<<"Sektor delatnosti: "<<st.getS()<<endl;
-    }
+{
+    cout<<"Naziv deonice: "<<st.getSY()<<endl;
+    cout<<"Cena: "<<st.getP()<<endl;
+    cout<<"Broj izdatih deonica: "<<st.getNS()<<endl;
+    cout<<"Trzisna Kapitalizacija: "<<st.getMarketCap()<<endl;
+    cout<<"Sektor delatnosti: "<<st.getS()<<endl;
+}
+
+
 #endif // STOCK_HPP_INCLUDED

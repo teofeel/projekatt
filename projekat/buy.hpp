@@ -3,7 +3,6 @@
 #include "ticket.hpp"
 #include "broker.hpp"
 #include "balance.hpp"
-#include "stock.hpp"
 
 class Buy_Sell: public Ticket{
 private:

@@ -33,6 +33,37 @@ public:
     string getName()const{return name;}
     string getSN()const{return server_name;}
     double getSpread()const{return spread;}
+
+    void pisiTxt(char mode='w')
+    {
+        ofstream fajl;
+
+        if (mode=='a'){
+            fajl.open ("broker.txt", ios_base::app);
+        }
+        else{
+            fajl.open ("broker.txt");
+        }
+        fajl<< name <<","<< server_name <<","<< spread <<endl;
+        fajl.close();
+    }
+
+    void citajBroker()
+    {
+        string linija;
+        ifstream fajl ("broker.txt");
+        if (fajl.is_open())
+        {
+            while ( getline (fajl,linija) )
+            {
+                cout << linija << '\n';
+            }
+            fajl.close();
+        }
+
+        else
+            cout << "Neuspesno otvoren fajl";
+    }
 };
 
 

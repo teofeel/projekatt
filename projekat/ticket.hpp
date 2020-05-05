@@ -1,7 +1,7 @@
 #ifndef TICKET_HPP_INCLUDED
 #define TICKET_HPP_INCLUDED
 #include "stock.hpp"
-#include <cstdlib>
+
 
 class Ticket{
 protected:

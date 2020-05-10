@@ -48,7 +48,6 @@ public:
     {
         cout<<"Broj ticketa: "<<num<<endl;
         cout<<"Broj kupljenih/prodatih deonica: "<<quantity<<endl;
-
     }
 };
 

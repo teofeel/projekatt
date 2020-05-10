@@ -2,7 +2,6 @@
 #define HISTORY_HPP_INCLUDED
 #include "balance.hpp"
 
-#include <vector>
 
 enum Mesec{Januar, Februar, Mart, April, Maj, Jun, Jul, Avgust, Septembar, Oktobar, Novembar, Decembar};
 
@@ -39,6 +38,13 @@ public:
     double getBal()const{return b.getBalance();}
     int getC()const{return b.getCredit();}
     double getD()const{return b.getDeposit();}
+
+    friend ostream& operator<<(ostream& izlaz,const History& h)
+    {
+        izlaz<<h.dan<<"."<<h.m+1<<"."<<h.godina<<"."<<endl;
+        izlaz<<"Balans: "<<h.b<<endl;
+        return izlaz;
+    }
 
 };
 

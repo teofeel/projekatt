@@ -46,9 +46,9 @@ public:
         s=Tech;
         spread=0;
     }
-    Stock(string s, double p, int ns, Sector ss, double sp)
+    Stock(string sy, double p, int ns, Sector ss, double sp)
     {
-        symbol=s;
+        symbol=sy;
         price=p;
         num_shares=ns;
         s=ss;
@@ -63,7 +63,7 @@ public:
         spread=st1.spread;
     }
 
-    void setSY(string s){symbol=s;}
+    void setSY(string sy){symbol=sy;}
     void setP(double p){price=p;}
     void setNS(int ns){num_shares=ns;}
     void setS(Sector ss){s=ss;}

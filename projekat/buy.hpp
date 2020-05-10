@@ -10,7 +10,7 @@ private:
     Balance bl;
 public:
     Buy_Sell():Ticket(),b(),bl(){}
-    Buy_Sell(const Ticket &t,const Broker &br,const Balance &bal):
+    Buy_Sell(Ticket t,const Broker &br,const Balance &bal):
         Ticket(t), b(br.getName(),br.getSN(),br.getSpread()), bl(bal.getValuta(),bal.getBalance(),bal.getCredit(),bal.getDeposit()){}
     Buy_Sell(const Buy_Sell &bs):
         Ticket(bs),b(bs.getBroker()),bl(bs.getBalans()){}
@@ -50,7 +50,6 @@ public:
         }
         bl.setBalance( bl.getBalance()+sell_price);
     }
-
 
 };
 

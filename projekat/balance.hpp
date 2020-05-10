@@ -48,7 +48,14 @@ public:
         balance=balance+deposit;
         deposit=0;
     }
-
+    friend ostream& operator<<(ostream& izlaz,const Balance& b)
+    {
+        izlaz<<b.v<<endl;
+        izlaz<<b.balance<<endl;
+        izlaz<<b.credit<<endl;
+        izlaz<<b.deposit<<endl;
+        return izlaz;
+    }
 };
 
 #endif // BALANCE_HPP_INCLUDED

@@ -25,7 +25,7 @@ public:
         password="Password";
         acc_num=0;
     }
-    Account(string i,string p,string pas, int a,const Balance &b):b(b.getValuta(),b.getBalance(),b.getCredit(),b.getDeposit())
+    Account(string i,string p,string pas, int a,const Balance& b):b(b.getValuta(),b.getBalance(),b.getCredit(),b.getDeposit())
     {
         ime=i;
         prezime=p;
@@ -42,7 +42,7 @@ public:
 
     void setIme(string i){ime=i;}
     void setPrezime(string p){prezime=p;}
-    void serPassword(string p){password=p;}
+    void setPassword(string p){password=p;}
     void setAcc(int a){acc_num=a;}
 
     Balance getB()const{return b;}
@@ -63,7 +63,15 @@ public:
             return false;
     }
 
-
+    friend ostream& operator<<(ostream& izlaz,const Account& a)
+    {
+        izlaz<<"Ime i prezime:"<<endl;
+        izlaz<<a.ime<<endl;
+        izlaz<<a.prezime<<endl;
+        izlaz<<a.acc_num<<endl;
+        izlaz<<a.b<<endl;
+        return izlaz;
+    }
 
 };
 

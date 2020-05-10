@@ -1,9 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include <string>
 #include <bits/stdc++.h>
-
+#include <vector>
 using namespace std;
 
 #include "account.hpp"
@@ -27,19 +26,14 @@ int main()
     Stock sm("APPL",280,50000,Tech,0.5);
 
     Balance bl(eur,10000,0,0);
-    Broker br("ICMarkets","IC_Live20",0.5);
-    Ticket t(5555,2,sm);
-    cout<<"Pre kupovine: "<<sm.getP()<<endl;
-    Buy_Sell bs(t,br,bl);
-    bs.BuyStock();
-    cout<<"AskPrice:"<<bs.getAskPrice()<<endl;
-    sm.setP(bs.getStockPrice());
-    cout<<"Krajnja cena: "<<sm.getP()<<endl;
-    Broker br1("ICMarkets","IC_Live19",0.4);
-    Broker br2("BlueBerry","IC_Live18",0.6);
-    br.pisiTxt('a');
-    br1.pisiTxt('a');
-    br2.pisiTxt('a');
-    br.citajBroker();
+    //Broker br("ICMarkets","IC_Live20",0.5);
+    //Ticket t(5555,2,sm);
+    Account a("Pera","Peric","iiiiiiiii",50005,bl);
+    History h(1,Februar,2019,bl);
+    cout<<bl<<endl;
+    cout<<a<<endl;
+    cout<<h<<endl;
+    Market m;
+    cout<<m.getBrMarketa()<<endl;
     return 0;
 }

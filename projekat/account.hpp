@@ -2,8 +2,9 @@
 #define ACCOUNT_HPP_INCLUDED
 #include <string>
 #include "balance.hpp"
-#include "funkcije.hpp"
-class Account{
+#include "portfolio.hpp"
+#include "covek.hpp"
+class Account: public Covek{
 private:
     string ime;
     string prezime;
@@ -47,6 +48,7 @@ public:
 
     Balance getB()const{return b;}
     string getIme(){return ime;}
+    string getPas()const{return password;}
     string getPrezime(){return prezime;}
     int getAcc()const{return acc_num;}
 
@@ -72,7 +74,46 @@ public:
         izlaz<<a.b<<endl;
         return izlaz;
     }
+    void pisiTxt(char mode='w')
+    {
+        ofstream fajl;
 
+        if (mode=='a'){
+            fajl.open ("accounts.txt", ios_base::app);
+        }
+        else{
+            fajl.open ("accounts.txt");
+        }
+        fajl<< ime <<"|"<< prezime <<"|"<< acc_num <<"|"<< password<<endl;
+        fajl.close();
+    }
+
+    void citajAcc()
+    {
+        string linija;
+        ifstream fajl ("accounts.txt");
+        if (fajl.is_open())
+        {
+            while ( getline (fajl,linija) )
+            {
+                cout << linija << '\n';
+            }
+            fajl.close();
+        }
+
+        else
+            cout << "Neuspesno otvoren fajl";
+    }
+    void ispisCoveka()
+    {
+        cout<<"Ime: "<<ime<<endl;
+        cout<<"Prezime: "<<prezime<<endl;
+        cout<<"Broj racuna: "<<acc_num<<endl;
+    }
+    double vrednost()
+    {
+        return b.getBalance();
+    }
 };
 
 #endif // ACCOUNT_HPP_INCLUDED

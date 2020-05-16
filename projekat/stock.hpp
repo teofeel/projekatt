@@ -2,7 +2,6 @@
 #define STOCK_HPP_INCLUDED
 
 enum Sector{Tech, Finansije, Medicina, Hemija, Rudarstvo, Prehrana, Nekretnine, Transport, Energetika};
-
 string EnumSector(Sector s)
 {
     switch(s)
@@ -102,7 +101,7 @@ public:
         else{
             fajl.open ("stocks.txt");
         }
-        fajl<< symbol <<","<< price <<","<< num_shares <<","<< EnumSector(s) <<","<< spread <<endl;
+        fajl<< symbol <<"|"<< price <<"|"<< num_shares <<"|"<< s <<"|"<< spread <<endl;
         fajl.close();
     }
 

@@ -2,9 +2,10 @@
 #define BOSS_HPP_INCLUDED
 #include <string>
 #include "stock.hpp"
-
+#include "covek.hpp"
 enum Iskustvo{pocetnik, senior};
-class Boss{
+
+class Boss:public Covek{
 private:
     string ime;
     string prezime;
@@ -44,6 +45,17 @@ public:
     Iskustvo getI(){return i;}
 
     string getComp(){return s.getSY();}
+
+    void ispisCoveka()
+    {
+        cout<<"Ime: "<<ime<<endl;
+        cout<<"Prezime: "<<prezime<<endl;
+    }
+
+    double vrednost()
+    {
+        return s.getMarketCap();
+    }
 };
 
 #endif // BOSS_HPP_INCLUDED

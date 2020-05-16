@@ -7,24 +7,24 @@
 class Buy_Sell: public Ticket{
 private:
     Broker b;
-    Balance bl;
+    Balance *bl;
+    static int brKup;
 public:
-    Buy_Sell():Ticket(),b(),bl(){}
-    Buy_Sell(Ticket t,const Broker &br,const Balance &bal):
-        Ticket(t), b(br.getName(),br.getSN(),br.getSpread()), bl(bal.getValuta(),bal.getBalance(),bal.getCredit(),bal.getDeposit()){}
+    Buy_Sell():Ticket(),b(),bl(){brKup++;}
+    Buy_Sell(Ticket t,const Broker &br,Balance *bal):
+        Ticket(t), b(br.getName(),br.getSN(),br.getSpread()), bl(bal){brKup++;}
     Buy_Sell(const Buy_Sell &bs):
-        Ticket(bs),b(bs.getBroker()),bl(bs.getBalans()){}
+        Ticket(bs),b(bs.b),bl(bs.bl){brKup++;}
 
     Broker getBroker()const{return b;}
-    Balance getBalans()const{return bl;}
 
     double getAskPrice()
     {
-        return st.getP()+st.getSpread()+b.getSpread();
+        return st->getP()+st->getSpread()+b.getSpread();
     }
     double getSellPrice()
     {
-        return st.getP()-st.getSpread();
+        return st->getP()-st->getSpread();
     }
 
     void BuyStock()
@@ -32,11 +32,11 @@ public:
         double buy_price;
         for(int i=0; i<quantity;i++)
         {
-            Ticket::Kupi(st.getSpread());
+            Ticket::Kupi(st->getSpread());
             //st.setP(st.getP()+st.getSpread());
-            buy_price=st.getP()+st.getSpread()+b.getSpread();
+            buy_price=st->getP()+st->getSpread()+b.getSpread();
         }
-        bl.setBalance(bl.getBalance()-buy_price);
+        bl->setBalance(bl->getBalance()-buy_price);
         //cout<<"Nakon kupovine: "<<st.getP()<<endl;
     }
 
@@ -45,13 +45,23 @@ public:
         double sell_price;
         for(int i=0;i<quantity;i++)
         {
-            Ticket::Prodaj(st.getSpread());
-            sell_price = st.getP()-st.getSpread();
+            Ticket::Prodaj(st->getSpread());
+            sell_price = st->getP()-st->getSpread();
         }
-        bl.setBalance( bl.getBalance()+sell_price);
+        bl->setBalance(bl->getBalance()+sell_price);
     }
-
+    void ispis()
+    {
+        cout<<"Symbol: "<<getStockSY()<<endl;
+        cout<<"Price: "<<getSellPrice()<<endl;
+        cout<<"Ticket: "<<getNum()<<endl;
+        cout<<"Quant: "<<getQuant()<<endl;
+    }
+    ~Buy_Sell()
+    {
+        brKup--;
+    }
 };
 
-
+int Buy_Sell::brKup=0;
 #endif // BUY_HPP_INCLUDED

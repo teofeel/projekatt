@@ -56,6 +56,36 @@ public:
         izlaz<<b.deposit<<endl;
         return izlaz;
     }
+    void pisiTxt(char mode='w')
+    {
+        ofstream fajl;
+
+        if (mode=='a'){
+            fajl.open ("balance.txt", ios_base::app);
+        }
+        else{
+            fajl.open ("balance.txt");
+        }
+        fajl<< v <<"|"<< balance <<"|"<< credit <<"|"<< deposit<<endl;
+        fajl.close();
+    }
+
+    void citajAcc()
+    {
+        string linija;
+        ifstream fajl ("balance.txt");
+        if (fajl.is_open())
+        {
+            while ( getline (fajl,linija) )
+            {
+                cout << linija << '\n';
+            }
+            fajl.close();
+        }
+
+        else
+            cout << "Neuspesno otvoren fajl";
+    }
 };
 
 #endif // BALANCE_HPP_INCLUDED

@@ -20,7 +20,6 @@ using namespace std;
     svaki akaunt ima posebnu portfolio klasu, kao i history klasu.Svaki put kad s epromeni balance pravi se novi objekat history
     i svi history objekti se pisu u jedan history fajl, svaki korisnik ima poseban ovaj fajl
 */
-
 int main()
 {
     Stock sm("APPL",280,50000,Tech,0.5);
@@ -28,6 +27,7 @@ int main()
     Balance bl(eur,10000,0,0);
     //Broker br("ICMarkets","IC_Live20",0.5);
     //Ticket t(5555,2,sm);
+    Portfolio p;
     Account a("Pera","Peric","iiiiiiiii",50005,bl);
     History h(1,Februar,2019,bl);
     cout<<bl<<endl;
@@ -35,5 +35,7 @@ int main()
     cout<<h<<endl;
     Market m;
     cout<<m.getBrMarketa()<<endl;
+    //Meni();
+    //cout<<endl<<"© github.com/teofeel & google.com All rights reserved"<<endl;
     return 0;
 }

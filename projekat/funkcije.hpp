@@ -244,7 +244,7 @@ void Login(vector<Account> *a)
 
 void Meni()
 {
-    cout<<"© 2020 github.com/teofeel & google.com All rights reserved"<<endl<<endl;
+    cout<<"© 2020 github.com/teofeel All rights reserved"<<endl<<endl;
     vector<Account> accounts;
     ucitajAccounts(&accounts);
     int ulaz;

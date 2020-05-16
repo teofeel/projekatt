@@ -36,6 +36,6 @@ int main()
     Market m;
     cout<<m.getBrMarketa()<<endl;
     //Meni();
-    //cout<<endl<<"© github.com/teofeel & google.com All rights reserved"<<endl;
+    //cout<<endl<<"© github.com/teofeel All rights reserved"<<endl;
     return 0;
 }

@@ -22,20 +22,33 @@ using namespace std;
 */
 int main()
 {
-    Stock sm("APPL",280,50000,Tech,0.5);
-
+    /*Stock sm("APPL",280,50000000,Tech,0.5);
+    Stock sm1("ALPH",1100,1000000,Tech,0.6);
+    Stock sm2("MRNA",66,250000,Medicina,0.3);
+    Stock sm3("AERO",10,1000000,Nekretnine,0.2);
+    sm.pisiTxt('a');
+    sm1.pisiTxt('a');
+    sm2.pisiTxt('a');
+    sm3.pisiTxt('a');
     Balance bl(eur,10000,0,0);
+    //bl.pisiTxt('a');
     //Broker br("ICMarkets","IC_Live20",0.5);
     //Ticket t(5555,2,sm);
     Portfolio p;
-    Account a("Pera","Peric","iiiiiiiii",50005,bl);
+    Account a("Pera","Peric","iiiiiiiii",50005,bl,p);
     History h(1,Februar,2019,bl);
     cout<<bl<<endl;
     cout<<a<<endl;
     cout<<h<<endl;
     Market m;
     cout<<m.getBrMarketa()<<endl;
-    //Meni();
+    Broker br1("ICMarkets","ICMarketsSC",0.05);
+    Broker br2("Blueberry","BlueberrySC",0.03);
+    Broker br3("IGBroker","IGSC",0.08);
+    br1.pisiTxt('a');
+    br2.pisiTxt('a');
+    br3.pisiTxt('a');*/
+    Meni();
     //cout<<endl<<"© github.com/teofeel All rights reserved"<<endl;
     return 0;
 }

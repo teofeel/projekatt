@@ -46,6 +46,37 @@ public:
         return izlaz;
     }
 
+    void pisiTxt(string ime,string acc,char mode='w')
+    {
+        ofstream fajl;
+        string naziv=ime+acc+"history.txt";
+        if (mode=='a'){
+            fajl.open (naziv, ios_base::app);
+        }
+        else{
+            fajl.open (naziv);
+        }
+        fajl<< dan <<"|"<< m <<"|"<< godina <<endl;
+        fajl.close();
+    }
+
+    void citajStocks(string ime, string acc)
+    {
+        string linija;
+        string naziv=ime+acc+"history.txt";
+        ifstream fajl (naziv);
+        if (fajl.is_open())
+        {
+            while ( getline (fajl,linija) )
+            {
+                cout << linija << '\n';
+            }
+            fajl.close();
+        }
+
+        else
+            cout << "Neuspesno otvoren fajl";
+    }
 };
 
 #endif // HISTORY_HPP_INCLUDED

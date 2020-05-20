@@ -129,7 +129,7 @@ void IspisStock(const Stock &st)
     cout<<"Cena: "<<st.getP()<<endl;
     cout<<"Broj izdatih deonica: "<<st.getNS()<<endl;
     cout<<"Trzisna Kapitalizacija: "<<st.getMarketCap()<<endl;
-    cout<<"Sektor delatnosti: "<<st.getS()<<endl;
+    cout<<"Sektor delatnosti: "<<EnumSector(st.getS())<<endl;
 }
 
 

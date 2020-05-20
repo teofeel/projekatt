@@ -15,7 +15,7 @@ public:
     {
         bs.push_back(t1);
     }
-    Portfolio(vector<Buy_Sell*> bs1)
+    Portfolio(const vector<Buy_Sell*> &bs1)
     {
         bs=bs1;
     }
@@ -81,6 +81,14 @@ public:
         for(auto it=bs.begin();it!=bs.end();it++)
         {
             (*it)->ispis();
+            cout<<"         ///////"<<endl;
+        }
+    }
+    void ocisti()
+    {
+        for(auto it=bs.begin();it!=bs.end();it++)
+        {
+                bs.erase(it);
         }
     }
 };

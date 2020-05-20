@@ -2,7 +2,11 @@
 #define BALANCE_HPP_INCLUDED
 
 enum Valuta{eur, usd, gbp, jpy, chf, aud};
-
+string PromeniUString(int a)
+{
+    auto str= to_string(a);
+    return str;
+}
 class Balance{
 private:
     Valuta v;
@@ -50,30 +54,31 @@ public:
     }
     friend ostream& operator<<(ostream& izlaz,const Balance& b)
     {
-        izlaz<<b.v<<endl;
-        izlaz<<b.balance<<endl;
-        izlaz<<b.credit<<endl;
-        izlaz<<b.deposit<<endl;
+        izlaz<<"Valuta: "<<b.v<<endl;
+        izlaz<<"Balans: "<<b.balance<<endl;
+        izlaz<<"Kredit: "<<b.credit<<endl;
+        izlaz<<"Deposit: "<<b.deposit<<endl;
         return izlaz;
     }
-    void pisiTxt(char mode='w')
+    void pisiTxt(string i,int br,char mode='w')
     {
         ofstream fajl;
-
+        string naziv=i+PromeniUString(br)+"balance.txt";
         if (mode=='a'){
-            fajl.open ("balance.txt", ios_base::app);
+            fajl.open (naziv, ios_base::app);
         }
         else{
-            fajl.open ("balance.txt");
+            fajl.open (naziv);
         }
         fajl<< v <<"|"<< balance <<"|"<< credit <<"|"<< deposit<<endl;
         fajl.close();
     }
 
-    void citajAcc()
+    void citajAcc(string i,int br)
     {
         string linija;
-        ifstream fajl ("balance.txt");
+        string naziv=i+PromeniUString(br)+"balance.txt";
+        ifstream fajl (naziv);
         if (fajl.is_open())
         {
             while ( getline (fajl,linija) )

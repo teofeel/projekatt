@@ -11,22 +11,23 @@ private:
     int  acc_num;
     string password;
     Balance b;
+    Portfolio p;
 public:
-    Account():b()
+    Account():b(),p()
     {
         ime="Ime";
         prezime="prezime";
         password="password";
         acc_num=0;
     }
-    Account(const Balance &b):b(b.getValuta(),b.getBalance(),b.getCredit(),b.getDeposit())
+    Account(const Balance &bal, const Portfolio &pp):b(bal.getValuta(),bal.getBalance(),bal.getCredit(),bal.getDeposit()),p(pp.getTicket())
     {
         ime="Ime";
         prezime="Prezime";
         password="Password";
         acc_num=0;
     }
-    Account(string i,string p,string pas, int a,const Balance& b):b(b.getValuta(),b.getBalance(),b.getCredit(),b.getDeposit())
+    Account(string i,string p,string pas, int a,const Balance& bal, const Portfolio &pp):b(bal.getValuta(),bal.getBalance(),bal.getCredit(),bal.getDeposit()), p(pp.getTicket())
     {
         ime=i;
         prezime=p;
@@ -45,8 +46,10 @@ public:
     void setPrezime(string p){prezime=p;}
     void setPassword(string p){password=p;}
     void setAcc(int a){acc_num=a;}
+    void setBalances(Balance* bal){b=*bal;}
 
-    Balance getB()const{return b;}
+    Balance* getB(){return &b;}
+    Portfolio* getPort(){return &p;}
     string getIme(){return ime;}
     string getPas()const{return password;}
     string getPrezime(){return prezime;}
@@ -57,9 +60,9 @@ public:
     int getC()const{return b.getCredit();}
     double getD()const{return b.getDeposit();}
 
-    bool Login(int accn, string pass)
+    bool Login(string im,int accn, string pass)
     {
-        if(accn==acc_num && pass==password)
+        if(accn==acc_num && pass==password && im==ime)
             return true;
         else
             return false;

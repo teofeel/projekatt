@@ -32,12 +32,16 @@ public:
         double buy_price;
         for(int i=0; i<quantity;i++)
         {
-            Ticket::Kupi(st->getSpread());
-            //st.setP(st.getP()+st.getSpread());
             buy_price=st->getP()+st->getSpread()+b.getSpread();
         }
+        if(buy_price<=bl->getBalance()){
+            for(int i=0; i<quantity;i++)
+            {
+                Ticket::Kupi(st->getSpread());
+            }
         bl->setBalance(bl->getBalance()-buy_price);
-        //cout<<"Nakon kupovine: "<<st.getP()<<endl;
+        }
+        else cout<<"Nije moguce kupiti" <<endl;
     }
 
     void SellStock()
@@ -46,7 +50,7 @@ public:
         for(int i=0;i<quantity;i++)
         {
             Ticket::Prodaj(st->getSpread());
-            sell_price = st->getP()-st->getSpread();
+            sell_price = st->getP()-st->getSpread()+b.getSpread();
         }
         bl->setBalance(bl->getBalance()+sell_price);
     }

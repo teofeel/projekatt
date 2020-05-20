@@ -1,0 +1,3 @@
+ICMarkets,ICMarketsSC,0.05
+Blueberry,BlueberrySC,0.03
+IGBroker,IGSC,0.08

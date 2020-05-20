@@ -1,43 +1,18 @@
 #ifndef FUNKCIJE_HPP_INCLUDED
 #define FUNKCIJE_HPP_INCLUDED
-
-/*void pisiTxt(string nazivFajla, string tekst, char mode='w')
-{
-    ofstream fajl;
-
-    if (mode=='a'){
-        fajl.open (nazivFajla, ios_base::app);
-    }
-    else{
-        fajl.open (nazivFajla);
-    }
-
-    fajl << tekst << endl;
-    fajl.close();
-
-}
-
-void citajStocks(string NazivFajla)
-{
-    string linija;
-    ifstream fajl (NazivFajla);
-    if (fajl.is_open())
-    {
-        while ( getline (fajl,linija) )
-        {
-            cout << linija << '\n';
-        }
-        fajl.close();
-    }
-
-    else
-        cout << "Neuspesno otvoren fajl";
-}
-*/
+#include <ctime>
 string PromeniUString(double a)
 {
     auto str= to_string(a);
     return str;
+}
+void Kraj_Prograna(vector<Account>* a)
+{
+    for(auto it=a->begin();it!=a->end();it++)
+    {
+        Portfolio *po=(*it).getPort();
+        po->ocisti();
+    }
 }
 Valuta promeniUenumV(int i)
 {
@@ -66,6 +41,25 @@ Sector promeniEnumSec(int i)
     case 8: return Energetika;
     }
 }
+Mesec promeniEnumMesec(int i)
+{
+    switch(i)
+    {
+    case 0: return Januar;
+    case 1: return Februar;
+    case 2: return Mart;
+    case 3: return April;
+    case 4: return Maj;
+    case 5: return Jun;
+    case 6: return Jul;
+    case 7: return Avgust;
+    case 8: return Septembar;
+    case 9: return Oktobar;
+    case 10: return Novembar;
+    case 11: return Decembar;
+    }
+
+}
 vector<string> splitSen(string str, char c=',')
 {
     string w = "";
@@ -87,41 +81,39 @@ vector<string> splitSen(string str, char c=',')
     return v;
 }
 
-void ucitajBalance(vector<Balance>* balances)
+Balance ucitajBalance(string i, int br)
 {
     string linijab;
     vector<string> resultb;
-    ifstream fajlb ("balance.txt");
+    string naziv=i+PromeniUString(br)+"balance.txt";
+    ifstream fajlb (naziv);
     if(fajlb.is_open())
         {
             while(getline(fajlb,linijab))
             {
                 resultb = splitSen(linijab,'|');
                 Balance b(promeniUenumV(stoi(resultb[0])),stod(resultb[1]),stoi(resultb[2]),stod(resultb[3]));
-                balances->push_back(b);
+                return b;
             }
         }
         else
             cout<<"Neuspesno otvoren fajl"<<endl;
 }
-void ucitajAccounts(vector<Account>* accounts)
+void ucitajAccounts(vector<Account> *accounts)
 {
         string linija;
-
         vector<string> result;
-        vector<Balance> balances;
         ifstream fajl ("accounts.txt");
 
-        ucitajBalance(&balances);
         if (fajl.is_open())
         {
-            int i=0;
             while (getline(fajl,linija))
             {
                 if (linija!="")
                 {
                     result = splitSen(linija,'|');
-                    Account a(result[0], result[1], result[3], stoi(result[2]),balances[i]);
+                    Portfolio p;
+                    Account a(result[0],result[1],result[3],stoi(result[2]),ucitajBalance(result[0],stoi(result[2])),p);
                     accounts->push_back(a);
                 }
             }
@@ -131,7 +123,7 @@ void ucitajAccounts(vector<Account>* accounts)
         else
             cout << "Neuspesno otvoren fajl"<<endl;
 }
-void ucitajStocks(vector<Stock>* stocks)
+void ucitajStocks(vector<Stock> *stocks)
 {
         string linija;
         vector<string> result;
@@ -144,7 +136,7 @@ void ucitajStocks(vector<Stock>* stocks)
                 {
                     result = splitSen(linija,'|');
 
-                    Stock s(result[0], stod(result[1]), stoi(result[2]), promeniEnumSec(stoi(result[3])),stod(result[4]));
+                    Stock s(result[0],stod(result[1]),stoi(result[2]),promeniEnumSec(stoi(result[3])),stod(result[4]));
                     stocks->push_back(s);
                 }
             }
@@ -154,29 +146,329 @@ void ucitajStocks(vector<Stock>* stocks)
         else
             cout << "Neuspesno otvoren fajl";
 }
+void ucitajBroker(vector<Broker> *br)
+{
+    string linija;
+        vector<string> result;
+        ifstream fajl ("broker.txt");
+        if (fajl.is_open())
+        {
+            while (getline(fajl,linija))
+            {
+                if (linija!="")
+                {
+                    result = splitSen(linija);
 
+                    Broker b(result[0],result[1],stoi(result[2]));
+                    br->push_back(b);
+                }
+            }
+            fajl.close();
+        }
 
-void Meni_Login(Account a)
+        else
+            cout << "Neuspesno otvoren fajl";
+}
+void ucitajHistory(string ime,int acc,vector<History> *h)
+{
+        string linija;
+        vector<string> result;
+        string naziv=ime+PromeniUString(acc)+"history.txt";
+        ifstream fajl (naziv);
+        if (fajl.is_open())
+        {
+            while (getline(fajl,linija))
+            {
+                if (linija!="")
+                {
+                    result = splitSen(linija);
+
+                    History hi(stoi(result[0]),promeniEnumMesec(stoi(result[1])),stoi(result[2]),ucitajBalance(ime,acc));
+                    h->push_back(hi);
+                }
+            }
+            fajl.close();
+        }
+
+        else
+            cout << "Neuspesno otvoren fajl";
+}
+
+void izbor_stock(vector<Stock> stonks)
+{
+    auto it=stonks.begin();
+    while(it!=stonks.end())
+    {
+        IspisStock(*it);
+        cout<<endl;
+        it++;
+    }
+    return;
+}
+
+void pretrazi_vector_stock(vector<Stock> stonks)
+{
+    auto it=stonks.begin();
+    while(it!=stonks.end())
+    {
+        cout<<"Naziv: "<<it->getSY()<<endl;
+        it++;
+    }
+}
+Stock izaberi_stock(vector<Stock> *stonks)
+{
+    pretrazi_vector_stock(*stonks);
+    string naziv;
+    cout<<"Vas izbor deonice: ";
+    cin>>naziv;
+    int it=0;
+    while(it<stonks->size())
+    {
+        if(naziv==stonks->at(it).getSY())
+            return stonks->at(it);
+        it++;
+    }
+      cout<<"Ne postoji"<<endl;
+
+}
+void pretrazi_vector_broker(vector<Broker> br)
+{
+    for(auto it=br.begin();it!=br.end();it++)
+    {
+        cout<<"Naziv: "<<it->getName()<<endl;
+    }
+
+}
+Broker izaberi_broker(vector<Broker> *br)
+{
+    pretrazi_vector_broker(*br);
+    string i;
+    cout<<"Vas izbor brokera: ";
+    cin>>i;
+    for(int it=0;it<br->size();it++)
+    {
+        if(i==br->at(it).getName())
+            return br->at(it);
+        it++;
+    }
+     cout<<"Ne postoji"<<endl;
+}
+void isprazni_stock_fajl()
+{
+    ofstream fajl;
+    fajl.open("stocks.txt", ofstream::out | ofstream::trunc);
+    fajl.close();
+    //isprazni se ceo fajl da bi se mogla upisati nova vrednost deonice na istom mestu kao pre
+}
+void promeni_stock(vector<Stock>* stonks, Stock st)
+{
+    for(auto it=stonks->begin();it!=stonks->end();it++)
+    {
+        if(st.getSY()==(*it).getSY())
+            (*it)=st;
+    }
+    isprazni_stock_fajl();
+    for(int i=0;i<stonks->size();i++)
+    {
+        stonks->at(i).pisiTxt('a');
+    }
+    return;
+}
+void kupi(Account *a, vector<Stock> *stonks)
+{
+    Stock st=izaberi_stock(stonks);
+    cout<<"Kolicina: ";
+    int q;
+    cin>>q;
+    Ticket t(rand()%2000001,q,&st);
+    vector<Broker> br;
+    ucitajBroker(&br);
+    Broker b=izaberi_broker(&br);
+
+    Buy_Sell bs(t,b,a->getB());
+    bs.BuyStock();
+    promeni_stock(stonks, st); // menja stari stock u bazi za novi (vrednosti)
+    return;
+}
+void prodaj(Account *a, vector<Stock> *stonks)
+{
+    Stock st=izaberi_stock(stonks);
+    cout<<"Kolicina: ";
+    int q;
+    cin>>q;
+    Ticket t(rand()%2000001,q,&st);
+    vector<Broker> br;
+    ucitajBroker(&br);
+    Broker b=izaberi_broker(&br);
+
+    Buy_Sell bs(t,b,a->getB());
+    bs.SellStock();
+    promeni_stock(stonks, st); // menja stari stock u bazi za novi (vrednosti)
+    return;
+}
+
+void isprazni_balance_fajl(string ime, int acc)
+{
+    string naziv=ime+PromeniUString(acc)+"balance.txt";
+    ofstream fajl;
+    fajl.open(naziv, ofstream::out | ofstream::trunc);
+    fajl.close();
+    //isprazni se ceo fajl da bi se mogla upisati nova vrednost deonice na istom mestu kao pre
+}
+void Deposit_balance(Account a, Balance *b)
+{
+    double x;
+    cout<<"Koliko zelite da dodate: ";
+    cin >> x;
+    if(x>10000)
+    {
+        x=10000;
+        cout<<"Maksimum je 10000"<<endl;
+        cout<<"10000 ce biti dodato na racun"<<endl;
+    }
+    b->setD(x);
+    b->setBalance(b->getBalance()+b->getDeposit());
+    isprazni_balance_fajl(a.getIme(),a.getAcc());
+    b->pisiTxt(a.getIme(),a.getAcc(),'a');
+}
+void Podizanje_balance(Account a,Balance *b)
+{
+    double x;
+    cout<<"Koliko zelite da podignete: ";
+    cin >> x;
+    if(x>10000)
+    {
+        x=10000;
+        cout<<"Maksimum je 10000"<<endl;
+        cout<<"10000 ce biti podignuto sa racuna"<<endl;
+    }
+    b->setBalance(b->getBalance()-x);
+    isprazni_balance_fajl(a.getIme(),a.getAcc());
+    b->pisiTxt(a.getIme(),a.getAcc(),'a');
+}
+
+void datum(Account a,Balance b, vector<History> *h)
+{
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    History h1( ltm->tm_mday,promeniEnumMesec(1+ltm->tm_mon),1900+ltm->tm_year,b);
+    h1.pisiTxt(a.getIme(),PromeniUString(a.getAcc()),'a');
+    h->push_back(h1);
+}
+void istorija(vector<History> h)
+{
+    cout<<endl;
+    for(int i=0; i<h.size();i++)
+    {
+        cout<<h[i]<<endl;
+        cout<<endl;
+    }
+}
+
+void Meni_Balans(Account a,Balance *b, vector<History> *h)
 {
     int ulaz;
+    *b=ucitajBalance(a.getIme(),a.getAcc());
+    //ucitajHistory(a.getIme(),a.getAcc(),h);
     do{
-        cin>>ulaz;
         cout<<"*************************************"<<endl;
-        cout<<"1. Portfolio"<<endl;
-        cout<<"2. Balans"<<endl;
-        cout<<"3. Kupi"<<endl;
-        cout<<"4. Istorija"<<endl;
+        cout<<"1. Stanje"<<endl;
+        cout<<"2. Deposit"<<endl;
+        cout<<"3. Podizanje"<<endl;
         cout<<"0. Nazad"<<endl;
         cout<<"*************************************"<<endl;
         cout<<"> ";
+        cin>>ulaz;
         switch(ulaz)
         {
-            case 0: return;
+            case 1:
+
+                cout<<*b<<endl;
+                break;
+            case 2:
+            {
+                Deposit_balance(a,b);
+                datum(a,*b,h);
+                break;
+            }
+            case 3:
+            {
+                Podizanje_balance(a,b);
+                datum(a,*b,h);
+                break;
+            }
+            default: cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
+        }
+
+    }while(ulaz!=0);
+}
+
+void Meni_Portfolio(Portfolio *po)
+{
+    int ulaz;
+    do{
+        cout<<"*************************************"<<endl;
+        cout<<"1. Moj portfolio"<<endl;
+        cout<<"2. Kapital "<<endl;
+        cout<<"0. Nazad"<<endl;
+        cout<<"*************************************"<<endl;
+        cout<<"> ";
+        cin>>ulaz;
+        switch(ulaz)
+        {
+            case 1:
+                po->ispisPortfolia();
+                break;
+            case 2:
+                cout<<"Kapital: "<<po->getCurr_Price()<<endl;
+                break;
+            case 0:
+                break;
+            default: cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
+        }
+
+    }while(ulaz!=0);
+}
+void Meni_Login(Account *a, vector<Stock> *stonks)
+{
+    int ulaz;
+    vector<History> h;
+    do{
+        cout<<"*************************************"<<endl;
+        cout<<"1. Portfolio"<<endl;
+        cout<<"2. Balans"<<endl;
+        cout<<"3. Deonice"<<endl;
+        cout<<"4. Kupi"<<endl;
+        cout<<"5. Prodaj"<<endl;
+        cout<<"6. Istorija"<<endl;
+        cout<<"0. Nazad"<<endl;
+        cout<<"*************************************"<<endl;
+        cout<<"> ";
+        cin>>ulaz;
+        switch(ulaz)
+        {
+            case 1:
+                Meni_Portfolio(a->getPort());
+                break;
+            case 2:
+                Meni_Balans(*a,a->getB(), &h);
+                break;
+            case 3:
+                izbor_stock(*stonks);
+                break;
+            case 4:
+                kupi(a,stonks);
+                break;
+            case 5:
+                prodaj(a,stonks);
+                break;
+            case 6:
+                istorija(h);
+                break;
             default: cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
         }
     }while(ulaz!=0);
 }
-
 
 void Registracija(vector<Account> *accounts)
 {
@@ -200,28 +492,34 @@ void Registracija(vector<Account> *accounts)
     int acc=rand()%10000000;
     cout<<"Broj racuna: "<<acc<<endl;
     Balance b;
-    Account a(i,p,pas,acc,b);
+    Portfolio po;
+    Account a(i,p,pas,acc,b,po);
     a.pisiTxt('a');
+    b.pisiTxt(a.getIme(),a.getAcc(),'a');
     accounts->push_back(a);
     return;
 }
 
-void Login(vector<Account> *a)
+void Login(vector<Account> *a, vector<Stock> *stonks)
 {
-
+    cout<<"Ime: ";
+    string im;
+    cin>>im;
     cout<<"Acc Number: ";
     int acc;
     cin>>acc;
-    cout<<endl;
     cout<<"Password: ";
     string pas;
     cin>>pas;
     cout<<endl;
+    ucitajAccounts(a);
     int i=0;
     while(i<a->size())
     {
-        if(a->at(i).Login(acc,pas)==true)
-            Meni_Login(a->at(i));
+        if(a->at(i).Login(im,acc,pas)==true){
+            Meni_Login(&a->at(i), stonks);
+            return;
+        }
         i++;
     }
     cout<<"Akaunt ne postoji."<<endl;
@@ -231,11 +529,11 @@ void Login(vector<Account> *a)
     int br;
     cin>>br;
     if(br==1)
-        Login(a);
+        Login(a,stonks);
     else if(br==2)
     {
         Registracija(a);
-        Login(a);
+        Login(a,stonks);
     }
     else
         return;
@@ -246,7 +544,9 @@ void Meni()
 {
     cout<<"© 2020 github.com/teofeel All rights reserved"<<endl<<endl;
     vector<Account> accounts;
-    ucitajAccounts(&accounts);
+    vector<Stock> stonks;
+    ucitajStocks(&stonks);
+
     int ulaz;
     do{
         cout<<"*************************************"<<endl;
@@ -262,9 +562,10 @@ void Meni()
             Registracija(&accounts);
             break;
         case 2:
-            Login(&accounts);
+            Login(&accounts,&stonks);
             break;
         case 0:
+            Kraj_Prograna(&accounts);
             return;
         default:
             cout<<"Opcija ne postoji. Unesite pomvo"<<endl;

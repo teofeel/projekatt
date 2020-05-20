@@ -14,18 +14,6 @@ void Kraj_Prograna(vector<Account>* a)
         po->ocisti();
     }
 }
-Valuta promeniUenumV(int i)
-{
-    switch(i)
-    {
-    case 0: return eur;
-    case 1: return usd;
-    case 2: return gbp;
-    case 3: return jpy;
-    case 4: return chf;
-    case 5: return aud;
-    }
-}
 Sector promeniEnumSec(int i)
 {
     switch(i)
@@ -41,6 +29,19 @@ Sector promeniEnumSec(int i)
     case 8: return Energetika;
     }
 }
+Valuta promeniUenumV(int i)
+{
+    switch(i)
+    {
+    case 0: return eur;
+    case 1: return usd;
+    case 2: return gbp;
+    case 3: return jpy;
+    case 4: return chf;
+    case 5: return aud;
+    }
+}
+
 Mesec promeniEnumMesec(int i)
 {
     switch(i)
@@ -59,6 +60,61 @@ Mesec promeniEnumMesec(int i)
     case 11: return Decembar;
     }
 
+}
+void dodaj_stock()
+{
+    cout<<"Koja je sada budala nasela na tvoju prevarau?"<<endl;
+    string simp;
+    cout<<"Symbol: ";
+    cin>>simp;
+    double c;
+    cout<<"Cena: ";
+    cin>>c;
+    int ns;
+    cout<<"Num_shares: ";
+    cin>>ns;
+    int sc;
+    cout<<"Sektor: ";
+    cin>>sc;
+    double sp;
+    cout<<"Spread: ";
+    cin>>sp;
+    Stock st(simp,c,ns,promeniEnumSec(sc),sp);
+    cout<<"Jesi siguran da oces da namucis coveka?"<<endl;
+    cout<<"Y/N"<<endl;
+    char y;
+    do{
+        cin>>y;
+        if(y=='Y')
+            st.pisiTxt('a');
+        else if(y=='N')
+            return;
+        else
+            cout<<"Razmisli opet"<<endl;
+    }while(y!='Y' || y!='N');
+}
+void Admin_mode()
+{
+    cout<<"Pa nije!"<<" ";
+    cout<<"Pomaze Bog"<<endl;
+    int ulaz;
+    do{
+        cin>>ulaz;
+        switch(ulaz)
+        {
+        case 1:
+            dodaj_stock();
+            break;
+        case 44810:
+            cout<<"**** **** ******** * **********"<<endl;
+            break;
+        case 0:
+            return;
+        default:
+            cout<<"Teodore, blago sam razocaran u tebe. Ti si pisao ovaj kod, valjda znas koja opcija postoji a koja ne"<<endl;
+            break;
+        }
+    }while(ulaz!=0);
 }
 vector<string> splitSen(string str, char c=',')
 {
@@ -113,7 +169,8 @@ void ucitajAccounts(vector<Account> *accounts)
                 {
                     result = splitSen(linija,'|');
                     Portfolio p;
-                    Account a(result[0],result[1],result[3],stoi(result[2]),ucitajBalance(result[0],stoi(result[2])),p);
+                    Balance b = ucitajBalance(result[0],stoi(result[2]));
+                    Account a(result[0],result[1],result[3],stoi(result[2]),&b,p);
                     accounts->push_back(a);
                 }
             }
@@ -287,23 +344,46 @@ void kupi(Account *a, vector<Stock> *stonks)
 
     Buy_Sell bs(t,b,a->getB());
     bs.BuyStock();
+    Portfolio *p = a->getPort();
+    p->setAnotherTicket(&bs);
     promeni_stock(stonks, st); // menja stari stock u bazi za novi (vrednosti)
     return;
 }
+void izaberi_ticket(Account *a)
+{
+    Portfolio *p=a->getPort();
+    p->ispisPortfolia();
+
+    int n;
+    cout<<"Broj tiketa: ";
+    cin>>n;
+    if(p->pretraziBS(n)==true)
+    {
+        p->izbaci(n);
+    }
+
+}
 void prodaj(Account *a, vector<Stock> *stonks)
 {
-    Stock st=izaberi_stock(stonks);
-    cout<<"Kolicina: ";
-    int q;
-    cin>>q;
-    Ticket t(rand()%2000001,q,&st);
     vector<Broker> br;
     ucitajBroker(&br);
     Broker b=izaberi_broker(&br);
 
-    Buy_Sell bs(t,b,a->getB());
-    bs.SellStock();
-    promeni_stock(stonks, st); // menja stari stock u bazi za novi (vrednosti)
+    Portfolio *p=a->getPort();
+    p->ispisPortfolia();
+
+    int n;
+    cout<<"Broj tiketa: ";
+    aaa:cin>>n;
+    Stock *st;
+    if(p->pretraziBS(n)==true)
+    {
+        st=p->getST(n);
+        p->izbaci(n);
+    }
+    else
+        goto aaa;
+    promeni_stock(stonks, *st); // menja stari stock u bazi za novi (vrednosti)
     return;
 }
 
@@ -365,10 +445,10 @@ void istorija(vector<History> h)
     }
 }
 
+
 void Meni_Balans(Account a,Balance *b, vector<History> *h)
 {
     int ulaz;
-    *b=ucitajBalance(a.getIme(),a.getAcc());
     //ucitajHistory(a.getIme(),a.getAcc(),h);
     do{
         cout<<"*************************************"<<endl;
@@ -433,6 +513,8 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
 {
     int ulaz;
     vector<History> h;
+    Balance b((ucitajBalance(a->getIme(),a->getAcc())));
+    a->setBalance(&b);
     do{
         cout<<"*************************************"<<endl;
         cout<<"1. Portfolio"<<endl;
@@ -460,10 +542,12 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
                 kupi(a,stonks);
                 break;
             case 5:
-                prodaj(a,stonks);
+                //prodaj(a,stonks);
                 break;
             case 6:
                 istorija(h);
+                break;
+            case 0:
                 break;
             default: cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
         }
@@ -493,7 +577,7 @@ void Registracija(vector<Account> *accounts)
     cout<<"Broj racuna: "<<acc<<endl;
     Balance b;
     Portfolio po;
-    Account a(i,p,pas,acc,b,po);
+    Account a(i,p,pas,acc,&b,po);
     a.pisiTxt('a');
     b.pisiTxt(a.getIme(),a.getAcc(),'a');
     accounts->push_back(a);
@@ -552,6 +636,8 @@ void Meni()
         cout<<"*************************************"<<endl;
         cout<<"1. Registracija"<<endl;
         cout<<"2. Prijavljivanje"<<endl;
+        cout<<"3. Deonice"<<endl;
+        cout<<"4. Marketi (work in progress)"<<endl;
         cout<<"0. Izlaz"<<endl;
         cout<<"*************************************"<<endl;
         cout<<"> ";
@@ -564,11 +650,18 @@ void Meni()
         case 2:
             Login(&accounts,&stonks);
             break;
+        case 3:
+            izbor_stock(stonks);
+            break;
         case 0:
             Kraj_Prograna(&accounts);
             return;
+        case 44810:
+            Admin_mode();
+            break;
         default:
             cout<<"Opcija ne postoji. Unesite pomvo"<<endl;
+            break;
         }
     }while(ulaz!=0);
 }

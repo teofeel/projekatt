@@ -32,7 +32,7 @@ public:
     int getNum()const{return num;}
     int getQuant()const{return quantity;}
 
-    Stock getStock()const{return *st;}
+    Stock* getStock()const{return st;}
     string getStockSY()const{return st->getSY();}
     double getStockPrice()const{return st->getP();}
     double getStockSpread()const{return st->getSpread();}

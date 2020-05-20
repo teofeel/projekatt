@@ -39,7 +39,7 @@ public:
             {
                 Ticket::Kupi(st->getSpread());
             }
-        bl->setBalance(bl->getBalance()-buy_price);
+            bl->setBalance(bl->getBalance()-buy_price);
         }
         else cout<<"Nije moguce kupiti" <<endl;
     }

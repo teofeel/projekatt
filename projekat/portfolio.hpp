@@ -47,16 +47,30 @@ public:
         }
         return curr;
     }
-
-    void pretraziStock(string st)
+    Stock* getST(int n)
     {
         bool p;
         for(auto it=bs.begin();it!=bs.end();it++)
         {
-            if(st==(*it)->getStockSY())
+            if(n=(*it)->getNum())
+            {
+                Stock *sm=(*it)->getStock();
+                p=true;
+                return sm;
+            }
+        }
+        if(!p) cout<<"Ne postoji"<<endl;
+    }
+    bool pretraziBS(int n)
+    {
+        bool p;
+        for(auto it=bs.begin();it!=bs.end();it++)
+        {
+            if(n==(*it)->getNum())
             {
                 (*it)->ispis();
                 p=true;
+                return p;
             }
         }
         if(!p) cout<<"Ne postoji"<<endl;
@@ -69,6 +83,7 @@ public:
         {
             if((*it)->getNum()==n)
             {
+                (*it)->SellStock();
                 bs.erase(it);
                 p=true;
             }

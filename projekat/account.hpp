@@ -10,7 +10,7 @@ private:
     string prezime;
     int  acc_num;
     string password;
-    Balance b;
+    Balance *b;
     Portfolio p;
 public:
     Account():b(),p()
@@ -20,45 +20,45 @@ public:
         password="password";
         acc_num=0;
     }
-    Account(const Balance &bal, const Portfolio &pp):b(bal.getValuta(),bal.getBalance(),bal.getCredit(),bal.getDeposit()),p(pp.getTicket())
+    Account( Balance *bal, const Portfolio &pp):b(bal),p(pp.getTicket())
     {
         ime="Ime";
         prezime="Prezime";
         password="Password";
         acc_num=0;
     }
-    Account(string i,string p,string pas, int a,const Balance& bal, const Portfolio &pp):b(bal.getValuta(),bal.getBalance(),bal.getCredit(),bal.getDeposit()), p(pp.getTicket())
+    Account(string i,string p,string pas, int a, Balance* bal, const Portfolio &pp):b(bal), p(pp.getTicket())
     {
         ime=i;
         prezime=p;
         password=pas;
         acc_num=a;
     }
-    Account (string i,string p,string pas, int a, Valuta vv, double ss, int c, double d): b(vv,ss,c,d)
+   /* Account (string i,string p,string pas, int a, Valuta vv, double ss, int c, double d): b(vv,ss,c,d)
     {
         ime=i;
         prezime=p;
         password=pas;
         acc_num=a;
-    }
+    }*/
 
     void setIme(string i){ime=i;}
     void setPrezime(string p){prezime=p;}
     void setPassword(string p){password=p;}
     void setAcc(int a){acc_num=a;}
-    void setBalances(Balance* bal){b=*bal;}
+    void setBalance(Balance* bal){b=bal;}
 
-    Balance* getB(){return &b;}
+    Balance* getB(){return b;}
     Portfolio* getPort(){return &p;}
     string getIme(){return ime;}
     string getPas()const{return password;}
     string getPrezime(){return prezime;}
     int getAcc()const{return acc_num;}
 
-    Valuta getV()const{return b.getValuta();}
-    double getBalans()const{return b.getBalance();}
-    int getC()const{return b.getCredit();}
-    double getD()const{return b.getDeposit();}
+    Valuta getV()const{return b->getValuta();}
+    double getBalans()const{return b->getBalance();}
+    int getC()const{return b->getCredit();}
+    double getD()const{return b->getDeposit();}
 
     bool Login(string im,int accn, string pass)
     {
@@ -115,7 +115,7 @@ public:
     }
     double vrednost()
     {
-        return b.getBalance();
+        return b->getBalance();
     }
 };
 

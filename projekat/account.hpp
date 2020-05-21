@@ -11,7 +11,7 @@ private:
     int  acc_num;
     string password;
     Balance *b;
-    Portfolio p;
+    Portfolio *p;
 public:
     Account():b(),p()
     {
@@ -20,14 +20,14 @@ public:
         password="password";
         acc_num=0;
     }
-    Account( Balance *bal, const Portfolio &pp):b(bal),p(pp.getTicket())
+    Account( Balance *bal,  Portfolio *pp):b(bal),p(pp)
     {
         ime="Ime";
         prezime="Prezime";
         password="Password";
         acc_num=0;
     }
-    Account(string i,string p,string pas, int a, Balance* bal, const Portfolio &pp):b(bal), p(pp.getTicket())
+    Account(string i,string p,string pas, int a, Balance* bal,  Portfolio *pp):b(bal), p(pp)
     {
         ime=i;
         prezime=p;
@@ -49,10 +49,10 @@ public:
     void setBalance(Balance* bal){b=bal;}
 
     Balance* getB(){return b;}
-    Portfolio* getPort(){return &p;}
-    string getIme(){return ime;}
+    Portfolio* getPort(){return p;}
+    string getIme()const{return ime;}
     string getPas()const{return password;}
-    string getPrezime(){return prezime;}
+    string getPrezime()const{return prezime;}
     int getAcc()const{return acc_num;}
 
     Valuta getV()const{return b->getValuta();}
@@ -77,6 +77,7 @@ public:
         izlaz<<a.b<<endl;
         return izlaz;
     }
+
     void pisiTxt(char mode='w')
     {
         ofstream fajl;

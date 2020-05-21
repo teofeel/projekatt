@@ -26,19 +26,17 @@ public:
 
     void setAnotherTicket(Buy_Sell *t1)
     {
+        cout<<"Dodaje se u portfolio...."<<endl;
         bs.push_back(t1);
+
     }
 
     vector<Buy_Sell*> getTicket()const{
         return bs;
     }
 
-    int koliko()
-    {
-        return bs.size();
-    }
 
-    double getCurr_Price()
+    double getCurr_Price()const
     {
         double curr=0;
         for(auto i=bs.begin(); i!=bs.end(); i++)
@@ -76,14 +74,14 @@ public:
         if(!p) cout<<"Ne postoji"<<endl;
     }
 
-    void izbaci(int n)
+    void izbaci(int n,string ime, int acc)
     {
         bool p;
         for(auto it=bs.begin();it!=bs.end();it++)
         {
             if((*it)->getNum()==n)
             {
-                (*it)->SellStock();
+                (*it)->SellStock(ime,acc);
                 bs.erase(it);
                 p=true;
             }
@@ -94,8 +92,7 @@ public:
     void ispisPortfolia()
     {
         for(auto it=bs.begin();it!=bs.end();it++)
-        {
-            (*it)->ispis();
+        {            (*it)->ispis();
             cout<<"         ///////"<<endl;
         }
     }

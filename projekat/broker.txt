@@ -1,3 +1,5 @@
-ICMarkets,ICMarketsSC,0.05
-Blueberry,BlueberrySC,0.03
-IGBroker,IGSC,0.08
+ICMarkets|ICMarketsSC|0.05
+Blueberry|BlueberrySC|0.03
+MAL|malsc|0.1
+SAXON|SAX|0.01
+IGBroker|IGSC|0.08

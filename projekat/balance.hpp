@@ -29,6 +29,7 @@ public:
         credit=c;
         deposit = d;
     }
+
     Balance (const Balance &b)
     {
         v=b.v;

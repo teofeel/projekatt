@@ -103,6 +103,7 @@ void Admin_mode()
         switch(ulaz)
         {
         case 1:
+            cout<<"More"<<endl;
             dodaj_stock();
             break;
         case 44810:
@@ -111,7 +112,7 @@ void Admin_mode()
         case 0:
             return;
         default:
-            cout<<"Teodore, blago sam razocaran u tebe. Ti si pisao ovaj kod, valjda znas koja opcija postoji a koja ne"<<endl;
+            cout<<"Idiote ti si pisao ovo, aj opet"<<endl;
             break;
         }
     }while(ulaz!=0);
@@ -169,8 +170,8 @@ void ucitajAccounts(vector<Account> *accounts)
                 {
                     result = splitSen(linija,'|');
                     Portfolio p;
-                    Balance b = ucitajBalance(result[0],stoi(result[2]));
-                    Account a(result[0],result[1],result[3],stoi(result[2]),&b,p);
+                    Balance b =ucitajBalance(result[0],stoi(result[2]));
+                    Account a(result[0],result[1],result[3],stoi(result[2]),&b,&p);
                     accounts->push_back(a);
                 }
             }
@@ -272,7 +273,7 @@ void pretrazi_vector_stock(vector<Stock> stonks)
         it++;
     }
 }
-Stock izaberi_stock(vector<Stock> *stonks)
+Stock* izaberi_stock(vector<Stock> *stonks)
 {
     pretrazi_vector_stock(*stonks);
     string naziv;
@@ -282,7 +283,7 @@ Stock izaberi_stock(vector<Stock> *stonks)
     while(it<stonks->size())
     {
         if(naziv==stonks->at(it).getSY())
-            return stonks->at(it);
+            return &stonks->at(it);
         it++;
     }
       cout<<"Ne postoji"<<endl;
@@ -292,11 +293,11 @@ void pretrazi_vector_broker(vector<Broker> br)
 {
     for(auto it=br.begin();it!=br.end();it++)
     {
-        cout<<"Naziv: "<<it->getName()<<endl;
+        cout<<"Naziv: "<<(*it).getName()<<endl;
     }
 
 }
-Broker izaberi_broker(vector<Broker> *br)
+Broker* izaberi_broker(vector<Broker> *br)
 {
     pretrazi_vector_broker(*br);
     string i;
@@ -305,7 +306,7 @@ Broker izaberi_broker(vector<Broker> *br)
     for(int it=0;it<br->size();it++)
     {
         if(i==br->at(it).getName())
-            return br->at(it);
+            return &br->at(it);
         it++;
     }
      cout<<"Ne postoji"<<endl;
@@ -317,57 +318,62 @@ void isprazni_stock_fajl()
     fajl.close();
     //isprazni se ceo fajl da bi se mogla upisati nova vrednost deonice na istom mestu kao pre
 }
-void promeni_stock(vector<Stock>* stonks, Stock st)
+void promeni_stock(vector<Stock> stonks, Stock st)
 {
-    for(auto it=stonks->begin();it!=stonks->end();it++)
+    for(int i=0;i<stonks.size();i++)
+    {
+        if(st.getSY()==stonks[i].getSY())
+        {
+            stonks[i]=st;
+        }
+    }
+
+   /* for(auto it=stonks->begin();it!=stonks->end();it++)
     {
         if(st.getSY()==(*it).getSY())
             (*it)=st;
-    }
+    }*/
     isprazni_stock_fajl();
-    for(int i=0;i<stonks->size();i++)
+    for(int i=0;i<stonks.size();i++)
     {
-        stonks->at(i).pisiTxt('a');
+        stonks[i].pisiTxt('a');
     }
-    return;
+
 }
-void kupi(Account *a, vector<Stock> *stonks)
+void kupi(Account *a,Portfolio *pom ,vector<Stock> *stonks)
 {
-    Stock st=izaberi_stock(stonks);
+    cout<<a->getBalans()<<endl;
+    Stock *st=izaberi_stock(stonks);
     cout<<"Kolicina: ";
     int q;
     cin>>q;
-    Ticket t(rand()%2000001,q,&st);
+    Ticket t(rand()%2000001,q,st);
     vector<Broker> br;
     ucitajBroker(&br);
-    Broker b=izaberi_broker(&br);
+    Broker *b=izaberi_broker(&br);
+    /*ako ne bi bilo pokazivaca na b dolazilo bi do memory violation sto bi crashovalo fajl
+     */
+    cout<<"odje ";
+    Buy_Sell *bs=new Buy_Sell(t,*b,a->getB());
+    cout<<"odje 1 ";
+    bool bol=bs->BuyStock(a->getIme(),a->getAcc());
+    if(bol==true){
+        cout<<"odje 2 ";
+        pom->setAnotherTicket(bs);
+        cout<<"odje 3 ";
 
-    Buy_Sell bs(t,b,a->getB());
-    bs.BuyStock();
-    Portfolio *p = a->getPort();
-    p->setAnotherTicket(&bs);
-    promeni_stock(stonks, st); // menja stari stock u bazi za novi (vrednosti)
-    return;
-}
-void izaberi_ticket(Account *a)
-{
-    Portfolio *p=a->getPort();
-    p->ispisPortfolia();
-
-    int n;
-    cout<<"Broj tiketa: ";
-    cin>>n;
-    if(p->pretraziBS(n)==true)
-    {
-        p->izbaci(n);
+        promeni_stock(*stonks, *st);
+        cout<<"odje 4 "; // menja stari stock u bazi za novi (vrednosti)
+        br.clear();
     }
-
+    else return;
 }
+
 void prodaj(Account *a, vector<Stock> *stonks)
 {
     vector<Broker> br;
     ucitajBroker(&br);
-    Broker b=izaberi_broker(&br);
+    Broker *b=izaberi_broker(&br);
 
     Portfolio *p=a->getPort();
     p->ispisPortfolia();
@@ -379,11 +385,13 @@ void prodaj(Account *a, vector<Stock> *stonks)
     if(p->pretraziBS(n)==true)
     {
         st=p->getST(n);
-        p->izbaci(n);
+        p->izbaci(n,a->getIme(),a->getAcc());
+
     }
     else
         goto aaa;
-    promeni_stock(stonks, *st); // menja stari stock u bazi za novi (vrednosti)
+
+    promeni_stock(*stonks, *st); // menja stari stock u bazi za novi (vrednosti)
     return;
 }
 
@@ -393,9 +401,8 @@ void isprazni_balance_fajl(string ime, int acc)
     ofstream fajl;
     fajl.open(naziv, ofstream::out | ofstream::trunc);
     fajl.close();
-    //isprazni se ceo fajl da bi se mogla upisati nova vrednost deonice na istom mestu kao pre
 }
-void Deposit_balance(Account a, Balance *b)
+void Deposit_balance(Account *a, Balance *b)
 {
     double x;
     cout<<"Koliko zelite da dodate: ";
@@ -408,8 +415,8 @@ void Deposit_balance(Account a, Balance *b)
     }
     b->setD(x);
     b->setBalance(b->getBalance()+b->getDeposit());
-    isprazni_balance_fajl(a.getIme(),a.getAcc());
-    b->pisiTxt(a.getIme(),a.getAcc(),'a');
+    isprazni_balance_fajl(a->getIme(),a->getAcc());
+    b->pisiTxt(a->getIme(),a->getAcc(),'a');
 }
 void Podizanje_balance(Account a,Balance *b)
 {
@@ -446,7 +453,7 @@ void istorija(vector<History> h)
 }
 
 
-void Meni_Balans(Account a,Balance *b, vector<History> *h)
+void Meni_Balans(Account *a,Balance *b, vector<History> *h)
 {
     int ulaz;
     //ucitajHistory(a.getIme(),a.getAcc(),h);
@@ -468,13 +475,13 @@ void Meni_Balans(Account a,Balance *b, vector<History> *h)
             case 2:
             {
                 Deposit_balance(a,b);
-                datum(a,*b,h);
+                datum(*a,*b,h);
                 break;
             }
             case 3:
             {
-                Podizanje_balance(a,b);
-                datum(a,*b,h);
+                Podizanje_balance(*a,b);
+                datum(*a,*b,h);
                 break;
             }
             default: cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
@@ -517,7 +524,7 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
     a->setBalance(&b);
     do{
         cout<<"*************************************"<<endl;
-        cout<<"1. Portfolio"<<endl;
+        cout<<"1. Portfolio (work in progress)"<<endl;
         cout<<"2. Balans"<<endl;
         cout<<"3. Deonice"<<endl;
         cout<<"4. Kupi"<<endl;
@@ -526,6 +533,7 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
         cout<<"0. Nazad"<<endl;
         cout<<"*************************************"<<endl;
         cout<<"> ";
+
         cin>>ulaz;
         switch(ulaz)
         {
@@ -533,13 +541,15 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
                 Meni_Portfolio(a->getPort());
                 break;
             case 2:
-                Meni_Balans(*a,a->getB(), &h);
+                Meni_Balans(a,a->getB(), &h);
                 break;
             case 3:
                 izbor_stock(*stonks);
                 break;
             case 4:
-                kupi(a,stonks);
+                kupi(a,a->getPort(),stonks);
+                stonks->clear();
+                ucitajStocks(stonks); //zbog segmenntation faulta zbog overloada u promeni_stock mora svaki put da se isprazni vektor da bi se dobili novi podaci
                 break;
             case 5:
                 //prodaj(a,stonks);
@@ -577,7 +587,7 @@ void Registracija(vector<Account> *accounts)
     cout<<"Broj racuna: "<<acc<<endl;
     Balance b;
     Portfolio po;
-    Account a(i,p,pas,acc,&b,po);
+    Account a(i,p,pas,acc,&b,&po);
     a.pisiTxt('a');
     b.pisiTxt(a.getIme(),a.getAcc(),'a');
     accounts->push_back(a);
@@ -665,5 +675,6 @@ void Meni()
         }
     }while(ulaz!=0);
 }
+
 
 #endif // FUNKCIJE_HPP_INCLUDED

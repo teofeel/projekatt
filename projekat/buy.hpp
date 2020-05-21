@@ -13,21 +13,22 @@ public:
     Buy_Sell():Ticket(),b(),bl(){brKup++;}
     Buy_Sell(Ticket t,const Broker &br,Balance *bal):
         Ticket(t), b(br.getName(),br.getSN(),br.getSpread()), bl(bal){brKup++;}
+
     Buy_Sell(const Buy_Sell &bs):
         Ticket(bs),b(bs.b),bl(bs.bl){brKup++;}
 
     Broker getBroker()const{return b;}
 
-    double getAskPrice()
+    double getAskPrice()const
     {
         return st->getP()+st->getSpread()+b.getSpread();
     }
-    double getSellPrice()
+    double getSellPrice()const
     {
         return st->getP()-st->getSpread();
     }
 
-    void BuyStock()
+    bool BuyStock(string i, int acc)
     {
         double buy_price;
         for(int i=0; i<quantity;i++)
@@ -40,11 +41,16 @@ public:
                 Ticket::Kupi(st->getSpread());
             }
             bl->setBalance(bl->getBalance()-buy_price);
+            bl->pisiTxt(i,acc);
+            return true;
         }
-        else cout<<"Nije moguce kupiti" <<endl;
+        else {
+            cout<<"Nije moguce kupiti" <<endl;
+            return false;
+        }
     }
 
-    void SellStock()
+    void SellStock(string i, int acc)
     {
         double sell_price;
         for(int i=0;i<quantity;i++)
@@ -53,6 +59,7 @@ public:
             sell_price = st->getP()-st->getSpread()+b.getSpread();
         }
         bl->setBalance(bl->getBalance()+sell_price);
+        bl->pisiTxt(i,acc);
     }
     void ispis()
     {

@@ -20,6 +20,12 @@ public:
         server_name=sn;
         spread=sp;
     }
+    Broker(Broker *b)
+    {
+        name=b->name;
+        server_name=b->server_name;
+        spread=b->spread;
+    }
     Broker(const Broker &b)
     {
         name=b.name;
@@ -44,7 +50,7 @@ public:
         else{
             fajl.open ("broker.txt");
         }
-        fajl<< name <<","<< server_name <<","<< spread <<endl;
+        fajl<< name <<"|"<< server_name <<"|"<< spread <<endl;
         fajl.close();
     }
 
@@ -64,7 +70,8 @@ public:
         else
             cout << "Neuspesno otvoren fajl";
     }
+    ~Broker();
 };
-
+Broker::~Broker(){}
 
 #endif // BROKER_HPP_INCLUDED

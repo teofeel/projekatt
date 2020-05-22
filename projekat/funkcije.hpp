@@ -63,7 +63,7 @@ Mesec promeniEnumMesec(int i)
 }
 void dodaj_stock()
 {
-    cout<<"Koja je sada budala nasela na tvoju prevarau?"<<endl;
+    cout<<"Koja je budala nasela na prevarau?"<<endl;
     string simp;
     cout<<"Symbol: ";
     cin>>simp;
@@ -93,7 +93,21 @@ void dodaj_stock()
             cout<<"Razmisli opet"<<endl;
     }while(y!='Y' || y!='N');
 }
-void Admin_mode()
+/*void napravi_market(vector<Stock>* stonks)
+{
+    string simp;
+    cin>>simp;
+    Market *m;
+
+    for(auto it=stonks->begin();it!=stonks->end();it++)
+    {
+        if((*it)->getSY()==simp)
+        {
+            m->setAnotherST(it);
+        }
+    }
+}*/
+void Admin_mode(vector<Stock>* stonks)
 {
     cout<<"Pa nije!"<<" ";
     cout<<"Pomaze Bog"<<endl;
@@ -106,6 +120,8 @@ void Admin_mode()
             cout<<"More"<<endl;
             dodaj_stock();
             break;
+        case 2:
+            //napravi_market(stonks);
         case 44810:
             cout<<"**** **** ******** * **********"<<endl;
             break;
@@ -215,9 +231,9 @@ void ucitajBroker(vector<Broker> *br)
             {
                 if (linija!="")
                 {
-                    result = splitSen(linija);
+                    result = splitSen(linija,'|');
 
-                    Broker b(result[0],result[1],stoi(result[2]));
+                    Broker b(result[0],result[1],stod(result[2]));
                     br->push_back(b);
                 }
             }
@@ -297,16 +313,17 @@ void pretrazi_vector_broker(vector<Broker> br)
     }
 
 }
-Broker* izaberi_broker(vector<Broker> *br)
+Broker izaberi_broker(vector<Broker> br)
 {
-    pretrazi_vector_broker(*br);
+    cout<<"izaberi ";
+    pretrazi_vector_broker(br);
     string i;
     cout<<"Vas izbor brokera: ";
     cin>>i;
-    for(int it=0;it<br->size();it++)
+    for(int it=0;it<br.size();it++)
     {
-        if(i==br->at(it).getName())
-            return &br->at(it);
+        if(i==br[it].getName())
+            return br[it];
         it++;
     }
      cout<<"Ne postoji"<<endl;
@@ -342,7 +359,6 @@ void promeni_stock(vector<Stock> stonks, Stock st)
 }
 void kupi(Account *a,Portfolio *pom ,vector<Stock> *stonks)
 {
-    cout<<a->getBalans()<<endl;
     Stock *st=izaberi_stock(stonks);
     cout<<"Kolicina: ";
     int q;
@@ -350,20 +366,15 @@ void kupi(Account *a,Portfolio *pom ,vector<Stock> *stonks)
     Ticket t(rand()%2000001,q,st);
     vector<Broker> br;
     ucitajBroker(&br);
-    Broker *b=izaberi_broker(&br);
+    Broker b(izaberi_broker(br));
     /*ako ne bi bilo pokazivaca na b dolazilo bi do memory violation sto bi crashovalo fajl
      */
-    cout<<"odje ";
-    Buy_Sell *bs=new Buy_Sell(t,*b,a->getB());
-    cout<<"odje 1 ";
+    Buy_Sell *bs=new Buy_Sell(t,b,a->getB());
     bool bol=bs->BuyStock(a->getIme(),a->getAcc());
     if(bol==true){
-        cout<<"odje 2 ";
         pom->setAnotherTicket(bs);
-        cout<<"odje 3 ";
 
-        promeni_stock(*stonks, *st);
-        cout<<"odje 4 "; // menja stari stock u bazi za novi (vrednosti)
+        promeni_stock(*stonks, *st); // menja stari stock u bazi za novi (vrednosti)
         br.clear();
     }
     else return;
@@ -373,25 +384,29 @@ void prodaj(Account *a, vector<Stock> *stonks)
 {
     vector<Broker> br;
     ucitajBroker(&br);
-    Broker *b=izaberi_broker(&br);
+    Broker b(izaberi_broker(br));
 
     Portfolio *p=a->getPort();
     p->ispisPortfolia();
-
-    int n;
-    cout<<"Broj tiketa: ";
-    aaa:cin>>n;
-    Stock *st;
-    if(p->pretraziBS(n)==true)
+    if(p!=NULL)
     {
-        st=p->getST(n);
-        p->izbaci(n,a->getIme(),a->getAcc());
+        int n;
+        cout<<"Broj tiketa: ";
+        aaa:cin>>n;
+        Stock *st;
+        if(p->pretraziBS(n)==true)
+        {
+            st=p->getST(n);
+            p->izbaci(n,a->getIme(),a->getAcc());
 
+        }
+        else
+            goto aaa;
+
+        promeni_stock(*stonks, *st); // menja stari stock u bazi za novi (vrednosti)
     }
     else
-        goto aaa;
-
-    promeni_stock(*stonks, *st); // menja stari stock u bazi za novi (vrednosti)
+        cout<<"Prazno"<<endl;
     return;
 }
 
@@ -667,7 +682,7 @@ void Meni()
             Kraj_Prograna(&accounts);
             return;
         case 44810:
-            Admin_mode();
+            Admin_mode(&stonks);
             break;
         default:
             cout<<"Opcija ne postoji. Unesite pomvo"<<endl;

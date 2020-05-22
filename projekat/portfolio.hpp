@@ -92,7 +92,11 @@ public:
     void ispisPortfolia()
     {
         for(auto it=bs.begin();it!=bs.end();it++)
-        {            (*it)->ispis();
+        {
+            cout<<(*it)->getStockSY()<<endl;
+            cout<<(*it)->getSellPrice()<<endl;
+            cout<<(*it)->getNum()<<endl;
+            cout<<(*it)->getQuant()<<endl;
             cout<<"         ///////"<<endl;
         }
     }

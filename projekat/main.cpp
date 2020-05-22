@@ -226,6 +226,7 @@ void isprazni_stock_fajl()
     fajl.open("stocks.txt", ofstream::out | ofstream::trunc);
     fajl.close();
     //isprazni se ceo fajl da bi se mogla upisati nova vrednost deonice na istom mestu kao pre
+    //umesto da
 }
 void promeni_stock(vector<Stock> stonks, Stock st)
 {
@@ -239,11 +240,10 @@ void promeni_stock(vector<Stock> stonks, Stock st)
     {
         stonks[i].pisiTxt('a');
     }
-
 }
 void kupi(Account *a,Portfolio *pom ,vector<Stock> *stonks)
 {
-    cout<<(double const)a->getBalans()<<endl;
+    cout<<a<<endl;
     Stock *st=izaberi_stock(stonks);
     cout<<"Kolicina: ";
     int q;
@@ -257,7 +257,7 @@ void kupi(Account *a,Portfolio *pom ,vector<Stock> *stonks)
     bool bol=bs.BuyStock(a->getIme(),a->getAcc());
     if(bol==true){
         pom->setAnotherTicket(&bs);
-        pom->ispisPortfolia();
+        //pom->ispisPortfolia();
         cout<<"Dodato"<<endl;
         promeni_stock(*stonks, *st); // menja stari stock u bazi za novi (vrednosti)
         cout<<"Promenjeno u fajlu"<<endl;
@@ -274,12 +274,12 @@ int main()
 
     vector<Account> a;
     ucitajAccounts(&a);
-   // Balance b=ucitajBalance("pera",41);
-    //Account *ac=new Account("pera","peric","idi",41,&b,&p);
-    cout<<a.at(0).getBalans()<<endl;
+
+    cout<<&a.at(0)<<endl;
     kupi(&a[0],a[0].getPort(),&stonk);
-    cout<<"Vratili se u main";
+    cout<<"Vratili se u main"<<endl;;
     ucitajStocks(&stonk);
+    cout<<sizeof(a[0])<<endl;
    /*
 
     /*sm.pisiTxt('a');
@@ -317,7 +317,7 @@ int main()
     cout<<p.getCurr_Price()<<endl;*/
 
 
-    //Meni();
+   // Meni();
 
     return 0;
 }

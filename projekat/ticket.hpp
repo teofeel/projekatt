@@ -19,13 +19,13 @@ public:
     Ticket(int n, int quant,Stock *s1)
     {
         num=n;
-        st=new Stock(*s1);
+        st=new Stock(s1);
         quantity=quant;
     }
     Ticket(const Ticket &t1)
     {
         num=t1.num;
-        st=new Stock(*t1.st);
+        st=new Stock(t1.st);
         quantity=t1.quantity;
     }
 

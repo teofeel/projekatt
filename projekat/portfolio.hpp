@@ -24,9 +24,9 @@ public:
         bs=p.getTicket();
     }
 
-    void setAnotherTicket(Buy_Sell b)
+    void setAnotherTicket(Buy_Sell *b)
     {
-        bs.push_back(&b);
+        bs.push_back(b);
     }
 
     vector<Buy_Sell*> getTicket()const{
@@ -39,7 +39,7 @@ public:
         double curr=0;
         for(auto i=bs.begin(); i!=bs.end(); i++)
         {
-            curr=curr+(*i)->getStockPrice()*(*i)->getQuant();
+            curr=curr+(*i)->getQuant()*(*i)->getStockPrice();
         }
         return curr;
     }
@@ -91,6 +91,7 @@ public:
     {
         for(auto it=bs.begin();it!=bs.end();it++)
         {
+            cout<<"odje"<<endl;
             (*it)->ispis();
         }
     }

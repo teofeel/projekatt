@@ -64,8 +64,11 @@ public:
     }
     void ispis()const
     {
+        cout<<"odje 1"<<endl;
         cout<<"Symbol: "<<getStockSY()<<endl;
+        cout<<"odje 1"<<endl;
         cout<<"Price: "<<getSellPrice()<<endl;
+        cout<<"odje 1"<<endl;
         cout<<"Ticket: "<<num<<endl;
         cout<<"Quant: "<<quantity<<endl;
     }

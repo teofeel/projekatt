@@ -93,46 +93,7 @@ void dodaj_stock()
             cout<<"Razmisli opet"<<endl;
     }while(y!='Y' || y!='N');
 }
-/*void napravi_market(vector<Stock>* stonks)
-{
-    string simp;
-    cin>>simp;
-    Market *m;
 
-    for(auto it=stonks->begin();it!=stonks->end();it++)
-    {
-        if((*it)->getSY()==simp)
-        {
-            m->setAnotherST(it);
-        }
-    }
-}*/
-void Admin_mode(vector<Stock>* stonks)
-{
-    cout<<"Pa nije!"<<" ";
-    cout<<"Pomaze Bog"<<endl;
-    int ulaz;
-    do{
-        cin>>ulaz;
-        switch(ulaz)
-        {
-        case 1:
-            cout<<"More"<<endl;
-            dodaj_stock();
-            break;
-        case 2:
-            //napravi_market(stonks);
-        case 44810:
-            cout<<"**** **** ******** * **********"<<endl;
-            break;
-        case 0:
-            return;
-        default:
-            cout<<"Idiote ti si pisao ovo, aj opet"<<endl;
-            break;
-        }
-    }while(ulaz!=0);
-}
 vector<string> splitSen(string str, char c=',')
 {
     string w = "";
@@ -267,19 +228,6 @@ void ucitajHistory(string ime,int acc,vector<History> *h)
         else
             cout << "Neuspesno otvoren fajl";
 }
-
-void izbor_stock(vector<Stock> stonks)
-{
-    auto it=stonks.begin();
-    while(it!=stonks.end())
-    {
-        IspisStock(*it);
-        cout<<endl;
-        it++;
-    }
-    return;
-}
-
 void pretrazi_vector_stock(vector<Stock> stonks)
 {
     auto it=stonks.begin();
@@ -305,6 +253,55 @@ Stock* izaberi_stock(vector<Stock> *stonks)
       cout<<"Ne postoji"<<endl;
 
 }
+void napravi_market(vector<Stock>* stonks)
+{
+    string simp;
+    cin>>simp;
+    string lc;
+    cin>>lc;
+    Market *m= new Market();
+    m->setName(simp);
+    m->setL(lc);
+    m->setAnotherST(izaberi_stock(stonks));
+}
+void Admin_mode(vector<Stock>* stonks)
+{
+    cout<<"Pa nije!"<<" ";
+    cout<<"Pomaze Bog"<<endl;
+    int ulaz;
+    do{
+        cin>>ulaz;
+        switch(ulaz)
+        {
+        case 1:
+            cout<<"More"<<endl;
+            dodaj_stock();
+            break;
+        case 2:
+            //napravi_market(stonks);
+        case 44810:
+            cout<<"**** **** ******** * **********"<<endl;
+            break;
+        case 0:
+            return;
+        default:
+            cout<<"Idiote ti si pisao ovo, aj opet"<<endl;
+            break;
+        }
+    }while(ulaz!=0);
+}
+void izbor_stock(vector<Stock> stonks)
+{
+    auto it=stonks.begin();
+    while(it!=stonks.end())
+    {
+        IspisStock(*it);
+        cout<<endl;
+        it++;
+    }
+    return;
+}
+
 void pretrazi_vector_broker(vector<Broker> br)
 {
     for(auto it=br.begin();it!=br.end();it++)
@@ -366,13 +363,13 @@ void kupi(Account *a,Portfolio *pom ,vector<Stock> *stonks)
     vector<Broker> br;
     ucitajBroker(&br);
     Broker b(izaberi_broker(br));
-    /*ako ne bi bilo pokazivaca na b dolazilo bi do memory violation sto bi crashovalo fajl
-     */
+
     Buy_Sell *bs=new Buy_Sell(t,b,a->getB());
     bool bol=bs->BuyStock(a->getIme(),a->getAcc());
     if(bol==true){
+        cout<<"Odje1"<<endl;
         pom->setAnotherTicket(bs);
-
+        cout<<"Odje1"<<endl;
         promeni_stock(*stonks, *st); // menja stari stock u bazi za novi (vrednosti)
         br.clear();
     }
@@ -465,7 +462,11 @@ void istorija(vector<History> h)
         cout<<endl;
     }
 }
-
+void boss()
+{
+    Boss b;
+    b.citajBoss();
+}
 
 void Meni_Balans(Account *a,Balance *b, vector<History> *h)
 {
@@ -545,6 +546,7 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
         cout<<"1. Portfolio (work in progress)"<<endl;
         cout<<"2. Balans"<<endl;
         cout<<"3. Deonice"<<endl;
+        cout<<"4. CEO"<<endl;
         cout<<"4. Kupi"<<endl;
         cout<<"5. Prodaj"<<endl;
         cout<<"6. Istorija"<<endl;
@@ -565,14 +567,17 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
                 izbor_stock(*stonks);
                 break;
             case 4:
-                kupi(a,a->getPort(),stonks);
-                stonks->clear();
-                ucitajStocks(stonks); //zbog segmenntation faulta zbog overloada u promeni_stock mora svaki put da se isprazni vektor da bi se dobili novi podaci
+                boss();
                 break;
             case 5:
-                //prodaj(a,stonks);
+                kupi(a,a->getPort(),stonks);
+                stonks->clear();
+                ucitajStocks(stonks);
                 break;
             case 6:
+                prodaj(a,stonks);
+                break;
+            case 7:
                 istorija(h);
                 break;
             case 0:

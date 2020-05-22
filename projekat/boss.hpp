@@ -56,6 +56,36 @@ public:
     {
         return s.getMarketCap();
     }
+
+    void pisiTxt(char mode='w')
+    {
+        ofstream fajl;
+        if (mode=='a'){
+            fajl.open ("bos.txt", ios_base::app);
+        }
+        else{
+            fajl.open ("boss.txt");
+        }
+        fajl<< ime <<"|"<< prezime <<"|"<< s.getSY()<<endl;
+        fajl.close();
+    }
+
+    void citajBoss()
+    {
+        string linija;
+        ifstream fajl("boss.txt");
+        if (fajl.is_open())
+        {
+            while ( getline(fajl,linija) )
+            {
+                cout << linija << '\n';
+            }
+            fajl.close();
+        }
+
+        else
+            cout << "Neuspesno otvoren fajl";
+    }
 };
 
 #endif // BOSS_HPP_INCLUDED

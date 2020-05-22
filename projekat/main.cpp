@@ -208,6 +208,7 @@ void pretrazi_vector_broker(vector<Broker> br)
 }
 Broker* izaberi_broker(vector<Broker> *br)
 {
+    cout<<br<<endl;
     pretrazi_vector_broker(*br);
     string i;
     cout<<"Vas izbor brokera: ";
@@ -216,7 +217,6 @@ Broker* izaberi_broker(vector<Broker> *br)
     {
         if(i==br->at(it).getName())
             return &br->at(it);
-        it++;
     }
      cout<<"Ne postoji"<<endl;
 }
@@ -243,24 +243,26 @@ void promeni_stock(vector<Stock> stonks, Stock st)
 }
 void kupi(Account *a,Portfolio *pom ,vector<Stock> *stonks)
 {
-    cout<<a<<endl;
-    Stock *st=izaberi_stock(stonks);
+    Stock *st=new Stock(izaberi_stock(stonks));
     cout<<"Kolicina: ";
     int q;
     cin>>q;
     Ticket t(rand()%2000001,q,st);
     vector<Broker> br;
     ucitajBroker(&br);
+    cout<<&br<<endl;
     Broker *b=new Broker(izaberi_broker(&br));
 
     Buy_Sell bs(t,*b,a->getB());
     bool bol=bs.BuyStock(a->getIme(),a->getAcc());
+
     if(bol==true){
-        pom->setAnotherTicket(&bs);
-        //pom->ispisPortfolia();
+        cout<<st->getSY()<<endl;
+        pom->setAnotherTicket(bs);
         cout<<"Dodato"<<endl;
         promeni_stock(*stonks, *st); // menja stari stock u bazi za novi (vrednosti)
         cout<<"Promenjeno u fajlu"<<endl;
+        br.clear();
     }
     return;
 }
@@ -275,12 +277,26 @@ int main()
     vector<Account> a;
     ucitajAccounts(&a);
 
-    cout<<&a.at(0)<<endl;
+    //a[0].getPort()->ispisPortfolia();
+    Broker br;
+    Broker br2;
+    Balance b;
+    Balance b2;
+    Ticket t;
+    Buy_Sell bs(t,br,&b);
+    Buy_Sell bs1(t,br2,&b2);
+    //Portfolio *p=new Buy_Sell(&bs);
+    //p.setAnotherTicket(&bs1);
+    //p.ispisPortfolia();
+    //bs.ispis();
+    //cout<<bs.getStockPrice()<<endl;
+    //cout<<bs.getStockSY()<<endl;
+
     kupi(&a[0],a[0].getPort(),&stonk);
     cout<<"Vratili se u main"<<endl;;
     ucitajStocks(&stonk);
-    cout<<sizeof(a[0])<<endl;
-   /*
+    a[0].getPort()->ispisPortfolia();
+
 
     /*sm.pisiTxt('a');
     sm1.pisiTxt('a');

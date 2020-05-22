@@ -17,6 +17,7 @@ public:
     Buy_Sell(const Buy_Sell &bs):
         Ticket(bs),b(bs.b),bl(bs.bl){brKup++;}
 
+
     Broker getBroker()const{return b;}
 
     double getAskPrice()const
@@ -61,12 +62,12 @@ public:
         bl->setBalance(bl->getBalance()+sell_price);
         bl->pisiTxt(i,acc);
     }
-    void ispis()
+    void ispis()const
     {
         cout<<"Symbol: "<<getStockSY()<<endl;
         cout<<"Price: "<<getSellPrice()<<endl;
-        cout<<"Ticket: "<<getNum()<<endl;
-        cout<<"Quant: "<<getQuant()<<endl;
+        cout<<"Ticket: "<<num<<endl;
+        cout<<"Quant: "<<quantity<<endl;
     }
     ~Buy_Sell()
     {

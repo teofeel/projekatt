@@ -15,7 +15,7 @@ public:
     {
         bs.push_back(t1);
     }
-    Portfolio(const vector<Buy_Sell*> &bs1)
+    Portfolio( vector<Buy_Sell*> &bs1)
     {
         bs=bs1;
     }
@@ -24,11 +24,9 @@ public:
         bs=p.getTicket();
     }
 
-    void setAnotherTicket(Buy_Sell *t1)
+    void setAnotherTicket(Buy_Sell b)
     {
-        cout<<"Dodaje se u portfolio...."<<endl;
-        bs.push_back(t1);
-
+        bs.push_back(&b);
     }
 
     vector<Buy_Sell*> getTicket()const{
@@ -93,11 +91,7 @@ public:
     {
         for(auto it=bs.begin();it!=bs.end();it++)
         {
-            cout<<(*it)->getStockSY()<<endl;
-            cout<<(*it)->getSellPrice()<<endl;
-            cout<<(*it)->getNum()<<endl;
-            cout<<(*it)->getQuant()<<endl;
-            cout<<"         ///////"<<endl;
+            (*it)->ispis();
         }
     }
     void ocisti()

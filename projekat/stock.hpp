@@ -61,7 +61,14 @@ public:
         s=st1.s;
         spread=st1.spread;
     }
-
+    Stock(Stock* st1)
+    {
+        symbol=st1->symbol;
+        price=st1->price;
+        num_shares=st1->num_shares;
+        s=st1->s;
+        spread=st1->spread;
+    }
     void setSY(string sy){symbol=sy;}
     void setP(double p){price=p;}
     void setNS(int ns){num_shares=ns;}

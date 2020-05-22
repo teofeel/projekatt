@@ -10,19 +10,22 @@ protected:
     int quantity;
     Stock *st;
 public:
-    Ticket():st()
+    Ticket()
     {
         num=0;
+        st=new Stock();
         quantity=0;
     }
-    Ticket(int n, int quant,Stock *s1):st(s1)
+    Ticket(int n, int quant,Stock *s1)
     {
         num=n;
+        st=new Stock(*s1);
         quantity=quant;
     }
-    Ticket(const Ticket &t1):st(t1.st)
+    Ticket(const Ticket &t1)
     {
         num=t1.num;
+        st=new Stock(*t1.st);
         quantity=t1.quantity;
     }
 

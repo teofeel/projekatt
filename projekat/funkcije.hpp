@@ -324,7 +324,6 @@ Broker izaberi_broker(vector<Broker> br)
     {
         if(i==br[it].getName())
             return br[it];
-        it++;
     }
      cout<<"Ne postoji"<<endl;
 }
@@ -499,7 +498,9 @@ void Meni_Balans(Account *a,Balance *b, vector<History> *h)
                 datum(*a,*b,h);
                 break;
             }
-            default: cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
+            default:
+                cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
+                break;
         }
 
     }while(ulaz!=0);
@@ -526,7 +527,9 @@ void Meni_Portfolio(Portfolio *po)
                 break;
             case 0:
                 break;
-            default: cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
+            default:
+                cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
+                break;
         }
 
     }while(ulaz!=0);
@@ -574,7 +577,9 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
                 break;
             case 0:
                 break;
-            default: cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
+            default:
+                cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
+                break;
         }
     }while(ulaz!=0);
 }

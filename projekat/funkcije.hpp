@@ -6,13 +6,10 @@ string PromeniUString(double a)
     auto str= to_string(a);
     return str;
 }
-void Kraj_Prograna(vector<Account>* a)
+void prodaj();
+void Kraj_Prograna(Account* a)
 {
-    for(auto it=a->begin();it!=a->end();it++)
-    {
-        Portfolio *po=(*it).getPort();
-        po->ocisti();
-    }
+        a->getPort()->ocisti(a->getIme(),a->getAcc());
 }
 Sector promeniEnumSec(int i)
 {
@@ -146,9 +143,9 @@ void ucitajAccounts(vector<Account> *accounts)
                 if (linija!="")
                 {
                     result = splitSen(linija,'|');
-                    Portfolio p;
+                    Portfolio *p=new Portfolio;
                     Balance b =ucitajBalance(result[0],stoi(result[2]));
-                    Account a(result[0],result[1],result[3],stoi(result[2]),&b,&p);
+                    Account a(result[0],result[1],result[3],stoi(result[2]),&b,p);
                     accounts->push_back(a);
                 }
             }
@@ -247,7 +244,9 @@ Stock* izaberi_stock(vector<Stock> *stonks)
     while(it<stonks->size())
     {
         if(naziv==stonks->at(it).getSY())
+        {
             return &stonks->at(it);
+        }
         it++;
     }
       cout<<"Ne postoji"<<endl;
@@ -268,28 +267,35 @@ void Admin_mode(vector<Stock>* stonks)
 {
     cout<<"Pa nije!"<<" ";
     cout<<"Pomaze Bog"<<endl;
-    int ulaz;
-    do{
-        cin>>ulaz;
-        switch(ulaz)
-        {
-        case 1:
-            cout<<"More"<<endl;
-            dodaj_stock();
-            break;
-        case 2:
-            //napravi_market(stonks);
-        case 44810:
-            cout<<"**** **** ******** * **********"<<endl;
-            break;
-        case 0:
-            return;
-        default:
-            cout<<"Idiote ti si pisao ovo, aj opet"<<endl;
-            break;
-        }
-    }while(ulaz!=0);
+    string s;
+    cin>>s;
+    if(s=="Pa nije")
+    {
+        int ulaz;
+        do{
+            cin>>ulaz;
+            switch(ulaz)
+            {
+            case 1:
+                cout<<"More"<<endl;
+                dodaj_stock();
+                break;
+            case 2:
+                //napravi_market(stonks);
+            case 44810:
+                cout<<"**** **** ******** * **********"<<endl;
+                break;
+            case 0:
+                return;
+            default:
+                cout<<"Idiote ti si pisao ovo, aj opet"<<endl;
+                break;
+            }
+        }while(ulaz!=0);
+    }
+    else exit(0);
 }
+
 void izbor_stock(vector<Stock> stonks)
 {
     auto it=stonks.begin();
@@ -353,7 +359,7 @@ void promeni_stock(vector<Stock> stonks, Stock st)
     }
 
 }
-void kupi(Account *a,Portfolio *pom ,vector<Stock> *stonks)
+void kupi(Account *a,vector<Stock> *stonks)
 {
     Stock *st=izaberi_stock(stonks);
     cout<<"Kolicina: ";
@@ -362,47 +368,49 @@ void kupi(Account *a,Portfolio *pom ,vector<Stock> *stonks)
     Ticket t(rand()%2000001,q,st);
     vector<Broker> br;
     ucitajBroker(&br);
-    Broker b(izaberi_broker(br));
-
-    Buy_Sell *bs=new Buy_Sell(t,b,a->getB());
+    Broker *b=new Broker(izaberi_broker(br));
+    Buy_Sell *bs=new Buy_Sell(t,*b,a->getB());
     bool bol=bs->BuyStock(a->getIme(),a->getAcc());
+
     if(bol==true){
-        cout<<"Odje1"<<endl;
-        pom->setAnotherTicket(bs);
-        cout<<"Odje1"<<endl;
-        promeni_stock(*stonks, *st); // menja stari stock u bazi za novi (vrednosti)
+        a->getPort()->setAnotherTicket(bs);
+        promeni_stock(*stonks, bs->getStock()); // menja stari stock u bazi za novi (vrednosti)
         br.clear();
     }
-    else return;
+    delete b;
+
+    return;
 }
 
 void prodaj(Account *a, vector<Stock> *stonks)
 {
     vector<Broker> br;
     ucitajBroker(&br);
-    Broker b(izaberi_broker(br));
+    Broker *b=new Broker(izaberi_broker(br));
 
-    Portfolio *p=a->getPort();
-    p->ispisPortfolia();
-    if(p!=NULL)
+
+    a->getPort()->ispisPortfolia();
+    int n;
+    cout<<"Broj tiketa: ";
+    aaa:cin>>n;
+    Stock st;
+    if(a->getPort()->pretraziBS(n)==true)
     {
-        int n;
-        cout<<"Broj tiketa: ";
-        aaa:cin>>n;
-        Stock *st;
-        if(p->pretraziBS(n)==true)
+        st=*a->getPort()->getST(n);
+        st.setP(st.getP()-st.getSpread());
+        if(a->getPort()->izbaci(n,a->getIme(),a->getAcc())==true)
         {
-            st=p->getST(n);
-            p->izbaci(n,a->getIme(),a->getAcc());
-
+            cout<<"Prodato"<<endl;
+            promeni_stock(*stonks, st);
+            return;
         }
-        else
-            goto aaa;
-
-        promeni_stock(*stonks, *st); // menja stari stock u bazi za novi (vrednosti)
     }
     else
-        cout<<"Prazno"<<endl;
+        goto aaa;
+
+    // menja stari stock u bazi za novi (vrednosti)
+    delete b;
+
     return;
 }
 
@@ -467,7 +475,15 @@ void boss()
     Boss b;
     b.citajBoss();
 }
-
+void promeni_vrednost_stocka(vector<Stock> *stonks)
+{
+    vector<Stock> st;
+    ucitajStocks(&st);
+    for(int it=0;it!=stonks->size();it++)
+    {
+        stonks->at(it).setP(st[it].getP());
+    }
+}
 void Meni_Balans(Account *a,Balance *b, vector<History> *h)
 {
     int ulaz;
@@ -499,6 +515,8 @@ void Meni_Balans(Account *a,Balance *b, vector<History> *h)
                 datum(*a,*b,h);
                 break;
             }
+            case 0:
+                return;
             default:
                 cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
                 break;
@@ -507,7 +525,7 @@ void Meni_Balans(Account *a,Balance *b, vector<History> *h)
     }while(ulaz!=0);
 }
 
-void Meni_Portfolio(Portfolio *po)
+void Meni_Portfolio(Portfolio po)
 {
     int ulaz;
     do{
@@ -521,10 +539,10 @@ void Meni_Portfolio(Portfolio *po)
         switch(ulaz)
         {
             case 1:
-                po->ispisPortfolia();
+                po.ispisPortfolia();
                 break;
             case 2:
-                cout<<"Kapital: "<<po->getCurr_Price()<<endl;
+                cout<<"Kapital: "<<po.getCurr_Price()<<endl;
                 break;
             case 0:
                 break;
@@ -535,6 +553,7 @@ void Meni_Portfolio(Portfolio *po)
 
     }while(ulaz!=0);
 }
+
 void Meni_Login(Account *a, vector<Stock> *stonks)
 {
     int ulaz;
@@ -543,13 +562,13 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
     a->setBalance(&b);
     do{
         cout<<"*************************************"<<endl;
-        cout<<"1. Portfolio (work in progress)"<<endl;
+        cout<<"1. Portfolio"<<endl;
         cout<<"2. Balans"<<endl;
         cout<<"3. Deonice"<<endl;
         cout<<"4. CEO"<<endl;
-        cout<<"4. Kupi"<<endl;
-        cout<<"5. Prodaj"<<endl;
-        cout<<"6. Istorija"<<endl;
+        cout<<"5. Kupi"<<endl;
+        cout<<"6. Prodaj"<<endl;
+        cout<<"7. Istorija"<<endl;
         cout<<"0. Nazad"<<endl;
         cout<<"*************************************"<<endl;
         cout<<"> ";
@@ -570,9 +589,8 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
                 boss();
                 break;
             case 5:
-                kupi(a,a->getPort(),stonks);
-                stonks->clear();
-                ucitajStocks(stonks);
+                kupi(a,stonks);
+                promeni_vrednost_stocka(stonks);
                 break;
             case 6:
                 prodaj(a,stonks);
@@ -581,6 +599,7 @@ void Meni_Login(Account *a, vector<Stock> *stonks)
                 istorija(h);
                 break;
             case 0:
+                Kraj_Prograna(a);
                 break;
             default:
                 cout<<"Opcija ne postoji. Unesite ponovo"<<endl;
@@ -600,10 +619,10 @@ void Registracija(vector<Account> *accounts)
     cin>>p;
     cout<<"Sifra: "<<endl;
     string pas;
-    cin>>pas;
+    getline(cin,pas);
     cout<<"Ponovite sifru: "<<endl;
     string pas1;
-    cin>>pas1;
+    getline(cin,pas1);
     while(pas1!=pas){
             cout<<"Sifre se ne poklapaju: ";
             cin>>pas1;
@@ -689,7 +708,7 @@ void Meni()
             izbor_stock(stonks);
             break;
         case 0:
-            Kraj_Prograna(&accounts);
+            cout<<endl;
             return;
         case 44810:
             Admin_mode(&stonks);

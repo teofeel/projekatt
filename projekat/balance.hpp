@@ -37,7 +37,13 @@ public:
         credit=b.credit;
         deposit=b.deposit;
     }
-
+    Balance (Balance *b)
+    {
+        v=b->v;
+        balance=b->balance;
+        credit=b->credit;
+        deposit=b->deposit;
+    }
     void setV(Valuta vv){v=vv;}
     void setBalance(double ss){balance=ss;}
     void setC(int c){credit=c;}

@@ -19,7 +19,7 @@ public:
     Ticket(int n, int quant,Stock *s1)
     {
         num=n;
-        st=new Stock(s1);
+        st=s1;
         quantity=quant;
     }
     Ticket(const Ticket &t1)
@@ -28,7 +28,12 @@ public:
         st=new Stock(t1.st);
         quantity=t1.quantity;
     }
-
+    Ticket(Ticket* t)
+    {
+        num=t->num;
+        st=new Stock(t->st);
+        quantity=t->quantity;
+    }
     void setNum(){num=rand()%2000001;}
     void setQuant(int q){quantity=q;}
 

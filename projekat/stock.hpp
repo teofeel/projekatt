@@ -81,6 +81,7 @@ public:
     Sector getS()const{return s;}
     double getSpread()const{return spread;}
 
+    string getSymbol(){return symbol;}
     double getMarketCap()const
     {
         return num_shares*price;

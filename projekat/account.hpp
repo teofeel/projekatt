@@ -20,11 +20,13 @@ public:
         password="password";
         acc_num=0;
     }
-    Account( Balance *bal,  Portfolio *pp):b(bal),p(pp)
+    Account( Balance *bal,  Portfolio *pp)
     {
         ime="Ime";
         prezime="Prezime";
         password="Password";
+        b=new Balance(bal);
+        p=new Portfolio(pp);
         acc_num=0;
     }
     Account(string i,string p,string pas, int a, Balance* bal,  Portfolio *pp):b(bal), p(pp)

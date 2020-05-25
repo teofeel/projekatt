@@ -23,7 +23,10 @@ public:
     {
         bs=p.getTicket();
     }
-
+    Portfolio(Portfolio *p)
+    {
+        bs=p->bs;
+    }
     void setAnotherTicket(Buy_Sell *b)
     {
         bs.push_back(b);
@@ -64,7 +67,23 @@ public:
         {
             if(n==(*it)->getNum())
             {
-                (*it)->ispis();
+                p=true;
+                return p;
+            }
+        }
+        if(!p) cout<<"Ne postoji"<<endl;
+        return 0;
+    }
+
+    bool izbaci(int n,string ime, int acc)
+    {
+        bool p;
+        for(auto it=bs.begin();it!=bs.end();it++)
+        {
+            if(n==(*it)->getNum())
+            {
+                (*it)->SellStock(ime,acc);
+                bs.erase(it);
                 p=true;
                 return p;
             }
@@ -72,34 +91,18 @@ public:
         if(!p) cout<<"Ne postoji"<<endl;
     }
 
-    void izbaci(int n,string ime, int acc)
-    {
-        bool p;
-        for(auto it=bs.begin();it!=bs.end();it++)
-        {
-            if((*it)->getNum()==n)
-            {
-                (*it)->SellStock(ime,acc);
-                bs.erase(it);
-                p=true;
-            }
-        }
-        if(!p) cout<<"Ne postoji"<<endl;
-    }
-
     void ispisPortfolia()
     {
-        for(auto it=bs.begin();it!=bs.end();it++)
+        for(int it=0;it!=bs.size();it++)
         {
-            cout<<"odje"<<endl;
-            (*it)->ispis();
+            bs[it]->ispis();
         }
     }
-    void ocisti()
+    void ocisti(string ime, int acc)
     {
         for(auto it=bs.begin();it!=bs.end();it++)
         {
-                bs.erase(it);
+                (*it)->SellStock(ime,acc);
         }
     }
 };

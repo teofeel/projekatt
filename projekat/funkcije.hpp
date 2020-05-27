@@ -190,7 +190,6 @@ void ucitajBroker(vector<Broker> *br)
                 if (linija!="")
                 {
                     result = splitSen(linija,'|');
-
                     Broker b(result[0],result[1],stod(result[2]));
                     br->push_back(b);
                 }
@@ -617,12 +616,13 @@ void Registracija(vector<Account> *accounts)
     cout<<"Prezime: "<<endl;
     string p;
     cin>>p;
+    fflush(stdin);
     cout<<"Sifra: "<<endl;
     string pas;
-    getline(cin,pas);
+    cin>>pas;
     cout<<"Ponovite sifru: "<<endl;
     string pas1;
-    getline(cin,pas1);
+    cin>>pas1;
     while(pas1!=pas){
             cout<<"Sifre se ne poklapaju: ";
             cin>>pas1;
